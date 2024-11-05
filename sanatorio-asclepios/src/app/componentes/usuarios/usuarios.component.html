@@ -1,0 +1,80 @@
+<div class="select-tipo">
+    <label for="userType">Filtrar por tipo de usuario: </label>
+    <select id="userType" [(ngModel)]="tipoSeleccionado">
+        <option value="">Elija una opción...</option>
+        <option value="Paciente">Pacientes</option>
+        <option value="Especialista">Especialistas</option>
+        <option value="Administrador">Administradores</option>
+    </select>
+</div>
+
+<table class="table table-striped" *ngIf="tipoSeleccionado === 'Paciente' && (usuarios$ | async) as usuarios">
+    <thead>
+        <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Edad</th>
+        <th>DNI</th>
+        <th>Obra Social</th>
+        <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
+        <td *ngIf="usr.esPaciente">{{ usr.nombre }}</td>
+        <td *ngIf="usr.esPaciente">{{ usr.apellido }}</td>
+        <td *ngIf="usr.esPaciente">{{ usr.edad }}</td>
+        <td *ngIf="usr.esPaciente">{{ usr.dni }}</td>
+        <td *ngIf="usr.esPaciente">{{ usr.obra_social }}</td>
+        <td *ngIf="usr.esPaciente">{{ usr.email }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table table-striped" *ngIf="tipoSeleccionado === 'Especialista' && (usuarios$ | async) as usuarios">
+    <thead>
+        <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Edad</th>
+        <th>DNI</th>
+        <th>Especialidad</th>
+        <th>Email</th>
+        <th>Cuenta Habilitada</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
+        <td *ngIf="usr.esEspecialista">{{ usr.nombre }}</td>
+        <td *ngIf="usr.esEspecialista">{{ usr.apellido }}</td>
+        <td *ngIf="usr.esEspecialista">{{ usr.edad }}</td>
+        <td *ngIf="usr.esEspecialista">{{ usr.dni }}</td>
+        <td *ngIf="usr.esEspecialista">{{ usr.especialidad }}</td>
+        <td *ngIf="usr.esEspecialista">{{ usr.email }}</td>
+        <td><button *ngIf="usr.esEspecialista" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida }}</button></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table table-striped" *ngIf="tipoSeleccionado === 'Administrador' && (usuarios$ | async) as usuarios">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Edad</th>
+        <th>DNI</th>
+        <th>Email</th>
+        <th>Cuenta Habilitada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
+        <td *ngIf="usr.esAdmin">{{ usr.nombre }}</td>
+        <td *ngIf="usr.esAdmin">{{ usr.apellido }}</td>
+        <td *ngIf="usr.esAdmin">{{ usr.edad }}</td>
+        <td *ngIf="usr.esAdmin">{{ usr.dni }}</td>
+        <td *ngIf="usr.esAdmin">{{ usr.email }}</td>
+        <td><button *ngIf="usr.esAdmin" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida }}</button></td>
+      </tr>
+    </tbody>
+</table>

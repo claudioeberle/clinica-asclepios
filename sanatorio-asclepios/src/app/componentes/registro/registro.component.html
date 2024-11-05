@@ -1,0 +1,235 @@
+<div class="container">
+    <div class="titulo"><h2>Registro de Usuarios</h2></div>
+    <div class="formulario">
+        <div class="row g-5">
+            <div class="col-md-12">
+                <div class="col-sm-12 mb-3">
+                    <label class="form-label" id="form-select-title">Tipo de Registro</label>
+                    <select [(ngModel)]="tipoRegistro" class="form-select">
+                        <option value="">Seleccione una opción...</option>
+                        <option value="paciente">Paciente</option>
+                        <option value="especialista">Especialista</option>
+                        <option *ngIf="esUsuarioAdmin" value="administrador">Administrador</option>
+
+                    </select>
+                </div>
+
+                <form *ngIf="tipoRegistro === 'paciente'" [formGroup]="altaFormPaciente" (ngSubmit)="onSubmit()">
+                    <div class="row g-3">
+                        <div class="col-sm-12">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" formControlName="nombre">
+                            <div *ngIf="altaFormPaciente.get('nombre')?.invalid && altaFormPaciente.get('nombre')?.touched">
+                                <p class="error-msg">Proporcione un Nombre válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" formControlName="apellido">
+                            <div *ngIf="altaFormPaciente.get('apellido')?.invalid && altaFormPaciente.get('apellido')?.touched">
+                                <p class="error-msg">Proporcione un Apellido válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" formControlName="edad">
+                            <div *ngIf="altaFormPaciente.get('edad')?.invalid && altaFormPaciente.get('edad')?.touched">
+                                <p class="error-msg">Proporcione una edad válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="number" formControlName="dni">
+                            <div *ngIf="altaFormPaciente.get('dni')?.invalid && altaFormPaciente.get('dni')?.touched">
+                                <p class="error-msg">Proporcione un DNI válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Obra Social</label>
+                            <select formControlName="obra_social" class="form-select">
+                                <option value="">Seleccione una opción...</option>
+                                <option value="osecac">OSECAC - Obra Social de los Empleados de Comercio y Actividades Civiles</option>
+                                <option value="osdepym">OSDEPYM - Obra Social de Empresarios, Profesionales y Monotributistas</option>
+                                <option value="osdipp">OSDIPP - Obra Social del Personal de Dirección de la Industria Privada del Petroleo</option>
+                                <option value="ospigpc">OSPIGPC - Obra Social del Personal de la Industria Gráfica de la Provincia de Córdoba</option>
+                                <option value="osme">OSME - Obra Social para el Personal del Ministerio de Economía y de Obras y Servicios Públicos</option>
+                                <option value="osfe">OSFE - Obra Social Ferroviaria</option>
+                                <option value="ospesca">OSPESCA - Obra Social de Capitanes, Pilotos y Patrones de Pesca</option>
+                                <option value="ase">ASE - Obra Social del Personal de Dirección Acción Social de Empresarios (A.S.E.)</option>
+                            </select>
+                            <div *ngIf="altaFormPaciente.get('obra_social')?.invalid && altaFormPaciente.get('obra_social')?.touched">
+                                <p class="error-msg">Proporcione una Obra Social válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Email</label>
+                            <input type="text" formControlName="email">
+                            <div *ngIf="altaFormPaciente.get('email')?.invalid && altaFormPaciente.get('email')?.touched">
+                                <p class="error-msg">Proporcione un Email válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Contraseña</label>
+                            <input type="text" formControlName="contrasena">
+                            <div *ngIf="altaFormPaciente.get('contrasena')?.invalid && altaFormPaciente.get('contrasena')?.touched">
+                                <p class="error-msg">Proporcione una contraseña válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">1º Foto de Perfil</label>
+                            <img [src]="perfil1src" alt="Foto de Perfil 1" width="150" height="150">
+                            <input type="file" (change)="onFileSelected($event, 'perfil1')" accept="image/jpeg" style="margin-left: 25px;"/>
+                            <div *ngIf="fotoPerfil1Error">
+                                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">2º Foto de Perfil</label>
+                            <img [src]="perfil2src" alt="Foto de Perfil 2" width="150" height="150">
+                            <input type="file" (change)="onFileSelected($event, 'perfil2')" accept="image/jpeg"  style="margin-left: 25px;"/>
+                            <div *ngIf="fotoPerfil2Error">
+                                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+                            </div>
+                        </div>                
+                    </div>
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">Registrar Paciente</button>
+                </form>
+
+
+                <form *ngIf="tipoRegistro === 'especialista'" [formGroup]="altaFormEspecialista" (ngSubmit)="onSubmit()">
+                    <div class="row g-3">
+                        <div class="col-sm-12">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" formControlName="nombre">
+                            <div *ngIf="altaFormEspecialista.get('nombre')?.invalid && altaFormEspecialista.get('nombre')?.touched">
+                                <p class="error-msg">Proporcione un Nombre válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" formControlName="apellido">
+                            <div *ngIf="altaFormEspecialista.get('apellido')?.invalid && altaFormEspecialista.get('apellido')?.touched">
+                                <p class="error-msg">Proporcione un Apellido válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" formControlName="edad">
+                            <div *ngIf="altaFormEspecialista.get('edad')?.invalid && altaFormEspecialista.get('edad')?.touched">
+                                <p class="error-msg">Proporcione una edad válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="number" formControlName="dni">
+                            <div *ngIf="altaFormEspecialista.get('dni')?.invalid && altaFormEspecialista.get('dni')?.touched">
+                                <p class="error-msg">Proporcione un DNI válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Especialidad</label>
+                            <select formControlName="especialidad" class="form-select" (change)="onEspecialidadChange($event)">
+                                <option value="">Seleccione una opción...</option>
+                                <option value="Medicina Clínica">Medicina Clínica</option>
+                                <option value="Ginecología">Ginecología</option>
+                                <option value="Cardiología">Cardiología</option>
+                                <option value="Traumatología">Traumatología</option>
+                                <option value="Dermatología">Dermatología</option>
+                                <option value="Cirugía">Cirugía</option>
+                                <option value="Kinesiología">Kinesiología</option>
+                                <option value="Oftalmología">Oftalmología</option>
+                                <option value="Otra">Otra...</option>
+                            </select>
+                            <div *ngIf="isOtraEspecialidad">
+                                <input type="text" class="form-control" (input)="updateEspecialidad($event)" placeholder="Ingrese su especialidad">
+                            </div>
+                            <div *ngIf="altaFormEspecialista.get('especialidad')?.invalid && altaFormEspecialista.get('especialidad')?.touched">
+                                <p class="error-msg">Proporcione una especialidad válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Email</label>
+                            <input type="text" formControlName="email">
+                            <div *ngIf="altaFormEspecialista.get('email')?.invalid && altaFormEspecialista.get('email')?.touched">
+                                <p class="error-msg">Proporcione un Email válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Contraseña</label>
+                            <input type="text" formControlName="contrasena">
+                            <div *ngIf="altaFormEspecialista.get('contrasena')?.invalid && altaFormEspecialista.get('contrasena')?.touched">
+                                <p class="error-msg">Proporcione una contraseña válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">1º Foto de Perfil</label>
+                            <img [src]="perfil1src" alt="Foto de Perfil 1" width="150" height="150">
+                            <input type="file" (change)="onFileSelected($event, 'perfil1')" accept="image/jpeg" style="margin-left: 25px;"/>
+                            <div *ngIf="fotoPerfil1Error">
+                                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">Registrar Especialista</button>
+                </form>
+
+                <form *ngIf="tipoRegistro === 'administrador'" [formGroup]="altaFormAdmin" (ngSubmit)="onSubmit()">
+                    <div class="row g-3">
+                        <div class="col-sm-12">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" formControlName="nombre">
+                            <div *ngIf="altaFormAdmin.get('nombre')?.invalid && altaFormAdmin.get('nombre')?.touched">
+                                <p class="error-msg">Proporcione un Nombre válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" formControlName="apellido">
+                            <div *ngIf="altaFormAdmin.get('apellido')?.invalid && altaFormAdmin.get('apellido')?.touched">
+                                <p class="error-msg">Proporcione un Apellido válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" formControlName="edad">
+                            <div *ngIf="altaFormAdmin.get('edad')?.invalid && altaFormAdmin.get('edad')?.touched">
+                                <p class="error-msg">Proporcione una edad válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="number" formControlName="dni">
+                            <div *ngIf="altaFormAdmin.get('dni')?.invalid && altaFormAdmin.get('dni')?.touched">
+                                <p class="error-msg">Proporcione un DNI válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Email</label>
+                            <input type="text" formControlName="email">
+                            <div *ngIf="altaFormAdmin.get('email')?.invalid && altaFormAdmin.get('email')?.touched">
+                                <p class="error-msg">Proporcione un Email válido.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Contraseña</label>
+                            <input type="text" formControlName="contrasena">
+                            <div *ngIf="altaFormAdmin.get('contrasena')?.invalid && altaFormAdmin.get('contrasena')?.touched">
+                                <p class="error-msg">Proporcione una contraseña válida.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">1º Foto de Perfil</label>
+                            <img [src]="perfil1src" alt="Foto de Perfil 1" width="150" height="150">
+                            <input type="file" (change)="onFileSelected($event, 'perfil1')" accept="image/jpeg" style="margin-left: 25px;"/>
+                            <div *ngIf="fotoPerfil1Error">
+                                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">Registrar Administrador</button>
+                </form>
+                <div id="messenger"><h2>{{prompt}}</h2></div>
+            </div>
+        </div>
+    </div>
+</div>

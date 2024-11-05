@@ -1,0 +1,78 @@
+#messenger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.invalid-feedback {
+  color:white;
+  font-size: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.form-label{
+  width: 18%;
+}
+
+button{
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+input{
+  margin-bottom: 25px;
+  width: 40vw;
+}
+
+.form-select{
+  margin-bottom: 25px;
+  width: 40vw;
+}
+
+label{
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+.error-msg{
+  color: rgb(129, 2, 2);
+  font-size: medium;
+  font-weight:normal;
+}
+
+.formulario{
+  display: flex;
+  align-items: center;
+  background-color: white;
+  margin-top: 5px;
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  padding-top: 5px;
+}
+
+.titulo {
+  display: flex;
+  justify-content: center;
+  background-color: #5f83b1;
+  width: 100%;
+  padding: 15px 0;
+  margin-top: 0;
+}
+
+.titulo h2 {
+  font-size: xx-large;
+  color: white;
+  margin: 0;
+}
+.foto-perfil{
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.foto-perfil img{
+  width: 150px;
+}

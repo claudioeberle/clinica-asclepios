@@ -1,0 +1,148 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: lightgrey;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  width: 100%;
+  padding: 25px 10px;
+  background-color: #2e62a6;
+  color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  position: relative;
+  height: 100px;
+  z-index: 50;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
+.header .titulo img {
+  width: 59px;
+  height: auto;
+  margin: 0 10px;
+}
+
+.header button img {
+  width: 20px;
+  height: auto;
+  margin: 0 10px;
+}
+
+.header .titulo h1 {
+  font-size: 40px;
+}
+
+.menu-button {
+  position: absolute;
+  left: 15px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.sesion-buttons {
+  position: absolute;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.login-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;  
+  background-color:#2e62a6;
+  color: white;
+  padding-top: 20px;
+  transition: 0.3s;
+  margin-top: 100px;
+  z-index: 1000;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.sidebar nav a:hover {
+  background-color: gray;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #2e62a6;
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  padding: 10px;
+  font-family: 'Lato', sans-serif;
+  z-index: 50;
+}
+
+.modal-open {
+  overflow: hidden;
+}
+
+.body{
+  background-color:grey;
+  width: 100%;
+  height: auto;
+}
+
+.footer img{
+  width: 20px;
+}

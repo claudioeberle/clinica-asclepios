@@ -1,0 +1,18 @@
+<div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal-content">
+  <button class="close-button" (click)="closeModal()">×</button>
+  <h2>INICIAR SESIÓN</h2>
+  <form (submit)="IniciarSesion()">
+    <div class="input">
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="correo" name="email" required />
+    </div>
+    <div class="input">
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" [(ngModel)]="contrasena" name="password" required />
+    </div>
+    <p class="prompt">{{prompt}}</p>
+    <button type="submit" (click)="IniciarSesion()">Iniciar Sesión</button>
+    <button type="button" (click)="onRegister()">Registrarse</button>
+  </form>
+</div>

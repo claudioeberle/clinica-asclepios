@@ -1,0 +1,37 @@
+<div class="header">
+    <button class="menu-button" (click)="toggleSidebar()"><img src="../assets/iconos/menu-barra-icon.svg" alt="">MENÚ</button>
+    <div class="titulo">
+        <h1>Sanatorio </h1>
+        <img src="../../../assets/iconos/sanatorio-asclepios.png" alt="sanatorio-asclepios">
+        <h1> Asclepios</h1>
+    </div>
+    <div class="sesion-buttons">
+      <button *ngIf="!usuario" class="login-button" (click)="openModal()">
+        <img src="../assets/iconos/usuario-icon.svg" alt="">INGRESAR
+      </button>
+      <div *ngIf="usuario" class="user-info">
+        <button class="logout-button" (click)="cerrarSesion()">
+          <img src="../assets/iconos/salir-icon.svg" alt="">CERRAR SESIÓN
+        </button>
+        <p class="user-email">{{usuario.email}}</p>
+      </div>
+    </div>
+</div>
+<div class="sidebar" [class.active]="isSidebarOpen">
+    <nav>
+        <a *ngIf="!usuario" (click)="goTo('home')" (click)="toggleSidebar()">Home</a>
+        <a *ngIf="usuario" (click)="goTo('servicios')" (click)="toggleSidebar()">Servicios</a>
+        <a (click)="goTo('about')" (click)="toggleSidebar()">Quiénes Somos</a>
+        <a (click)="goTo('especialidades')" (click)="toggleSidebar()">Especialidades</a>
+        <a (click)="goTo('contacto')" (click)="toggleSidebar()">Contacto</a>
+    </nav>
+  </div>
+  <div class="body">
+    <app-spinner *ngIf="isLoading"></app-spinner>
+    <router-outlet/>
+  </div>
+<app-login *ngIf="isModalOpen" (close)="closeModal()"></app-login>
+<div class="footer">
+  <div><img src="../assets/iconos/clock-icon.svg" alt="horarios-icon"> Horarios: Lunes a Viernes 8:00 a 19:00 y Sábados 8:00 a 14:00</div>
+  <div><img src="../assets/iconos/locacion-icon.svg" alt="ubicacion-icon"> Av. Buen Ayre 1234 - Ciudad Autónoma de Buenos Aires</div>
+</div>

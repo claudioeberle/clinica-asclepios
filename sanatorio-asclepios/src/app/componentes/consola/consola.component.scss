@@ -1,0 +1,36 @@
+.consola-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    height: calc(100vh - 200px);
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .consola-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2e62a6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  
+    img {
+      width: 50px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+  
+    span {
+      text-align: center;
+    }
+  
+    &:hover {
+      background-color: #245a8c;
+    }
+  }
