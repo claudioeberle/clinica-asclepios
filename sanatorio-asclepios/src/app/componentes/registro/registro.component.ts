@@ -7,11 +7,19 @@ import { usuario } from '../../interfaces/usuario';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { SpinnerService } from '../../services/spinner.service';
+import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha";
+import { EspecialidadesService } from '../../services/especialidades.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    ReactiveFormsModule,
+    RecaptchaFormsModule,
+    RecaptchaModule],
+    
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss'
 })
@@ -33,6 +41,10 @@ export class RegistroComponent implements OnInit{
   public email:string = '';
   public usuarioLogueado:any;
   public esUsuarioAdmin = false;
+  public captchaResponse: string | null = null;
+  public altaExitosa = false;
+  public especialidades: any[] = [];
+  public especialidadesElegidas: any[] = [];
 
 
   constructor(
@@ -40,7 +52,8 @@ export class RegistroComponent implements OnInit{
     private firestore:Firestore,
     private router:Router,
     private auth:AuthService,
-    private spinnerService:SpinnerService
+    private spinnerService:SpinnerService,
+    private especialidadesService:EspecialidadesService
   ) {
 
     this.altaFormPaciente = this.fb.group({
@@ -77,6 +90,10 @@ export class RegistroComponent implements OnInit{
       perfil1: ['', Validators.required],
     });
 
+    this.especialidadesService.getEspecialidades().subscribe((especialidades) => {
+      this.especialidades = especialidades;
+      console.log('Especialidades cargadas:', this.especialidades);
+    });
     
   }
 
@@ -91,6 +108,10 @@ export class RegistroComponent implements OnInit{
     setTimeout(() => {
       this.spinnerService.hide();
     }, 1000);
+  }
+
+  resolved(captchaResponse: any) {
+    this.captchaResponse = captchaResponse;
   }
 
   onEspecialidadChange(event: Event): void {
@@ -168,27 +189,28 @@ export class RegistroComponent implements OnInit{
 
 
   async onSubmit(): Promise<void> {
+
     if (this.tipoRegistro === 'paciente' 
       && this.altaFormPaciente.valid
     ) {
         const alta = this.auth.AltaUsuario(this.altaFormPaciente.get('email')?.value, this.altaFormPaciente.get('contrasena')?.value);
         let formData: usuario = {
-        id:'',
-        nombre: this.altaFormPaciente.get('nombre')?.value || '',
-        apellido: this.altaFormPaciente.get('apellido')?.value || '',
-        edad: this.altaFormPaciente.get('edad')?.value || 0,
-        dni: this.altaFormPaciente.get('dni')?.value || 0,
-        email: this.altaFormPaciente.get('email')?.value || '',
-        obra_social: this.altaFormPaciente.get('obra_social')?.value || '',
-        especialidad: '',
-        perfil1: this.fotoPerfil1Base64 || '',
-        perfil2: this.fotoPerfil2Base64 || '',
-        cuenta_valida: true,
-        esPaciente: true,
-        esEspecialista: false,
-        esAdmin: false,
-        fechaAlta: new Date()
-      };
+          id:'',
+          nombre: this.altaFormPaciente.get('nombre')?.value || '',
+          apellido: this.altaFormPaciente.get('apellido')?.value || '',
+          edad: this.altaFormPaciente.get('edad')?.value || 0,
+          dni: this.altaFormPaciente.get('dni')?.value || 0,
+          email: this.altaFormPaciente.get('email')?.value || '',
+          obra_social: this.altaFormPaciente.get('obra_social')?.value || '',
+          especialidad: '',
+          perfil1: this.fotoPerfil1Base64 || '',
+          perfil2: this.fotoPerfil2Base64 || '',
+          cuenta_valida: true,
+          esPaciente: true,
+          esEspecialista: false,
+          esAdmin: false,
+          fechaAlta: new Date()
+        };
       this.formData = formData;
       this.email = this.altaFormPaciente.get('email')?.value;
 

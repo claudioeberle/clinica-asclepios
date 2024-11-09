@@ -14,5 +14,9 @@
     <p class="prompt">{{prompt}}</p>
     <button type="submit" (click)="IniciarSesion()">Iniciar Sesión</button>
     <button type="button" (click)="onRegister()">Registrarse</button>
+    <button class="acceso" (click)="cargaUser('paciente')">Paciente</button>
+    <button class="acceso" (click)="cargaUser('especialista')">Especialista</button>
+    <button class="acceso" (click)="cargaUser('admin')">Administrador</button>
+
   </form>
 </div>

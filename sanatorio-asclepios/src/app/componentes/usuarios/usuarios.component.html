@@ -17,6 +17,8 @@
         <th>DNI</th>
         <th>Obra Social</th>
         <th>Email</th>
+        <th>Foto 1</th>
+        <th>Foto 2</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +29,12 @@
         <td *ngIf="usr.esPaciente">{{ usr.dni }}</td>
         <td *ngIf="usr.esPaciente">{{ usr.obra_social }}</td>
         <td *ngIf="usr.esPaciente">{{ usr.email }}</td>
+        <td *ngIf="usr.esPaciente">
+            <img [src]="(usr | fotoUsuario:1)" alt="Foto de perfil 1" class="img-thumbnail" style="width: 100px; height: 100px;">
+        </td>
+        <td *ngIf="usr.esPaciente">
+            <img [src]="(usr | fotoUsuario:2)" alt="Foto de perfil 2" class="img-thumbnail" style="width: 100px; height: 100px;">
+        </td>
         </tr>
     </tbody>
 </table>
@@ -41,6 +49,7 @@
         <th>Especialidad</th>
         <th>Email</th>
         <th>Cuenta Habilitada</th>
+        <th>Perfil 1</th>
         </tr>
     </thead>
     <tbody>
@@ -51,7 +60,10 @@
         <td *ngIf="usr.esEspecialista">{{ usr.dni }}</td>
         <td *ngIf="usr.esEspecialista">{{ usr.especialidad }}</td>
         <td *ngIf="usr.esEspecialista">{{ usr.email }}</td>
-        <td><button *ngIf="usr.esEspecialista" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida }}</button></td>
+        <td><button *ngIf="usr.esEspecialista" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida | cuentaValida }}</button></td>
+        <td *ngIf="usr.esEspecialista">
+            <img [src]="(usr | fotoUsuario)" alt="Foto de perfil" class="img-thumbnail" style="width: 100px; height: 100px;">
+        </td>
         </tr>
     </tbody>
 </table>
@@ -65,6 +77,7 @@
         <th>DNI</th>
         <th>Email</th>
         <th>Cuenta Habilitada</th>
+        <th>Perfil 1</th>
       </tr>
     </thead>
     <tbody>
@@ -74,7 +87,10 @@
         <td *ngIf="usr.esAdmin">{{ usr.edad }}</td>
         <td *ngIf="usr.esAdmin">{{ usr.dni }}</td>
         <td *ngIf="usr.esAdmin">{{ usr.email }}</td>
-        <td><button *ngIf="usr.esAdmin" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida }}</button></td>
+        <td><button *ngIf="usr.esAdmin" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida | cuentaValida }}</button></td>
+        <td *ngIf="usr.esAdmin">
+            <img [src]="(usr | fotoUsuario)" alt="Foto de perfil" class="img-thumbnail" style="width: 100px; height: 100px;">
+        </td>
       </tr>
     </tbody>
 </table>

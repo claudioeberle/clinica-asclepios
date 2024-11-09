@@ -50,7 +50,7 @@ export class LoginComponent {
           this.closeModal();
           this.router.navigateByUrl('servicios');
         } else if(!this.auth.EmailVerificado()){
-          Swal.fire({title: "Su Email no ha sido validado aún.",text: "Hemos enviado un email a " + this.correo,icon: "error"});
+          Swal.fire({title: "Su Email no ha sido validado aún.",text: "Verifique su correo.", icon: "error"});
 
         }else{
           Swal.fire({title: "Su cuenta se encuentra deshabilitada.",text: "Contacte al Administrador.",icon: "error"});
@@ -77,5 +77,14 @@ export class LoginComponent {
     this.contrasena = '';
   }
 
-
+  cargaUser(tipo:string){
+    if(tipo === 'paciente'){
+      this.correo = 'gijec46023@acroins.com'
+    }else if(tipo === 'especialista'){
+      this.correo = 'claudioeberle@gmail.com'
+    } else {
+      this.correo = 'mamopoy258@edectus.com'
+    }
+    this.contrasena = '123456'
+  }
 }

@@ -5,6 +5,7 @@ import { RegistroComponent } from './componentes/registro/registro.component';
 import { ConsolaComponent } from './componentes/consola/consola.component';
 import { UsuariosComponent } from './componentes/usuarios/usuarios.component';
 import { SpinnerComponent } from './componentes/spinner/spinner.component';
+import { ContactoComponent } from './componentes/contacto/contacto.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: "full" },
@@ -15,5 +16,7 @@ export const routes: Routes = [
     { path: 'servicios', component: ConsolaComponent },
     { path: 'usuarios', component: UsuariosComponent },
     { path: 'spinner', component: SpinnerComponent },
+    { path: 'contacto', component: ContactoComponent },
+
 
 ];

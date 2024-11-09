@@ -7,13 +7,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FiltroPorTipoUsrPipe } from '../../pipes/filtro-por-tipo-usr.pipe';
 import { doc, Firestore, updateDoc } from '@angular/fire/firestore';
 import { UsuariosService } from '../../services/usuarios.service';
-import { SpinnerComponent } from '../spinner/spinner.component';
 import { SpinnerService } from '../../services/spinner.service';
+import { CuentaValidaPipe } from '../../pipes/cuenta-valida.pipe';
+import { FotoUsuarioPipe } from '../../pipes/foto-usuario.pipe';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, FiltroPorTipoUsrPipe],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    FormsModule, 
+    FiltroPorTipoUsrPipe,
+    CuentaValidaPipe,
+    FotoUsuarioPipe],
+
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
 })

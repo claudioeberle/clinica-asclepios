@@ -4,11 +4,13 @@ import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 import { usuario } from '../interfaces/usuario';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService{
+
   private usuarioSubject = new BehaviorSubject<any>(false);
   usuario$ = this.usuarioSubject.asObservable();
   public usersCollection:any[] = [];
@@ -70,8 +72,7 @@ export class AuthService{
   async AltaUsuario(correo:string, contrasena:string){
     this.tempUsr = null;
     this.tempUsr = this.getCurrentUser();
-
-    const userCredential = await createUserWithEmailAndPassword(this.auth, correo, contrasena)
+      const userCredential = await createUserWithEmailAndPassword(this.auth, correo, contrasena)
       .then(async (res) =>{
         sendEmailVerification(res.user);
         if(this.tempUsr){
