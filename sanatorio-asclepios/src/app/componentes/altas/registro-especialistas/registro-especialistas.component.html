@@ -1,0 +1,80 @@
+<form [formGroup]="altaFormEspecialista" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+        <div class="col-sm-12">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" formControlName="nombre">
+            <div *ngIf="altaFormEspecialista.get('nombre')?.invalid && altaFormEspecialista.get('nombre')?.touched">
+                <p class="error-msg">Proporcione un Nombre válido. Solo letras. Máx. 50 caracteres.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" formControlName="apellido">
+            <div *ngIf="altaFormEspecialista.get('apellido')?.invalid && altaFormEspecialista.get('apellido')?.touched">
+                <p class="error-msg">Proporcione un Apellido válido. Solo letras. Máx. 50 caracteres.</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <label for="edad" class="form-label">Edad</label>
+            <input type="number" formControlName="edad">
+            <div *ngIf="altaFormEspecialista.get('edad')?.invalid && altaFormEspecialista.get('edad')?.touched">
+                <p class="error-msg">Proporcione una edad válida. Min. 18 y Máx. 65.</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="number" formControlName="dni">
+            <div *ngIf="altaFormEspecialista.get('dni')?.invalid && altaFormEspecialista.get('dni')?.touched">
+                <p class="error-msg">Proporcione un DNI válido. Mín. 7 y Máx. 8 dígitos.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label for="especialidad-select">Especialidades</label>
+            <div *ngFor="let especialidad of especialidades" class="checkbox-item">
+              <input
+                class="checkbox"
+                type="checkbox"
+                [formControlName]="'especialidad'"
+                [(ngModel)]="especialidad.seleccionado"
+                (change)="agregarEspecialidad(especialidad.nombre)" 
+                [id]="especialidad.nombre"
+              />
+              <label [for]="especialidad.nombre">{{ especialidad.nombre }}</label>
+            </div>
+            <div *ngIf="altaFormEspecialista.get('especialidad')?.invalid && altaFormEspecialista.get('especialidad')?.touched">
+                <p class="error-msg">Debe seleccionar al menos una especialidad.</p>
+            </div>
+        </div>
+        <div>
+            <label>Nueva Especialidad:</label>
+            <div class="input-agregar">
+                <input #especialidadInput type="text" placeholder="Ingrese especialidad">
+                <button (click)="agregarNuevaEspecialidad(especialidadInput.value)">Agregar +</button>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">Email</label>
+            <input type="text" formControlName="email">
+            <div *ngIf="altaFormEspecialista.get('email')?.invalid && altaFormEspecialista.get('email')?.touched">
+                <p class="error-msg">Proporcione un Email válido. Respete el formato.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">Contraseña</label>
+            <input type="password" formControlName="contrasena">
+            <div *ngIf="altaFormEspecialista.get('contrasena')?.invalid && altaFormEspecialista.get('contrasena')?.touched">
+                <p class="error-msg">Proporcione una contraseña válida. Mín. 6 caracteres.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">1º Foto de Perfil</label>
+            <img [src]="perfil1src" alt="Foto de Perfil 1" width="150" height="150">
+            <input type="file" (change)="onFileSelected($event, 'perfil1')" accept="image/jpeg" style="margin-left: 25px;"/>
+            <div *ngIf="fotoPerfil1Error">
+                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+            </div>
+        </div>
+        <re-captcha (resolved)="resolved($event)" siteKey="6LfDUnYqAAAAALtNr54ely-h7AOGwNQIDVc6FycU"></re-captcha>
+    </div>
+    <button class="w-100 btn btn-primary btn-lg" type="submit" [disabled]="!captchaResponse">Registrar Especialista</button>
+</form>

@@ -28,7 +28,7 @@ import { FotoUsuarioPipe } from '../../pipes/foto-usuario.pipe';
 export class UsuariosComponent implements OnInit{
   
   usuarios$!: Observable<usuario[]>;
-  tipoSeleccionado: string = '';
+  tipoSeleccionado: string = 'Paciente';
   usuarioSeleccionado:any;
   prompt:string= '';
 

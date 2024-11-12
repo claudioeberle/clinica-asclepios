@@ -1,0 +1,46 @@
+<div class="titulo">Mi Perfil</div>
+<div class="container">
+  <div class="card mi-perfil-card">
+    <div class="perfil-foto">
+      <img [src]="mostrarPerfil1 ? usuario.perfil1 : usuario.perfil2" alt="Foto de perfil" />
+      <button *ngIf="usuario.esPaciente" (click)="toggleFoto()">Cambiar Foto</button>
+    </div>
+
+    <div class="perfil-datos">
+      <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+      <p><strong>Edad:</strong> {{ usuario.edad }}</p>
+      <p><strong>DNI:</strong> {{ usuario.dni }}</p>
+      <p><strong>Email:</strong> {{ usuario.email }}</p>
+      <p *ngIf="usuario.esPaciente"><strong>Obra Social:</strong> {{ usuario.obra_social }}</p>
+    </div>
+  </div>
+
+  <div class="disponibilidad-card" *ngIf="usuario.esEspecialista">
+    <h3>Disponibilidad:</h3>
+    <table class="disponibilidad-table">
+      <thead>
+        <tr>
+          <th>Especialidad</th>
+          <th>Lunes</th>
+          <th>Martes</th>
+          <th>Miércoles</th>
+          <th>Jueves</th>
+          <th>Viernes</th>
+          <th>Sábado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let especialidad of especialidades">
+          <td>{{ especialidad.nombre }}</td>
+          <td *ngFor="let dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']">
+            <button id={{especialidad.nombre}}
+              [ngClass]="{'activo': especialidad.dias[dia] === 'Activo', 'inactivo': especialidad.dias[dia] === 'Inactivo'}"
+              (click)="toggleEstado(especialidad.nombre, dia)" (click)="actualizarTurnos()">
+              {{ especialidad.dias[dia] }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

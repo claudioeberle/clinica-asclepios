@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, User } from '@angular/fire/auth';
 import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 import { usuario } from '../interfaces/usuario';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -47,11 +47,16 @@ export class AuthService{
     return this.usuarioSubject.getValue();
   }
 
-  getAllUsers(){
+  /*getAllUsers(){
     const col = collection(this.firestore, 'usuarios');
     const dataObservable = collectionData(col);
     //dataObservable.subscribe(data => console.log('Data from Firestore:', data));
     return dataObservable;
+  }*/
+
+  getAllUsers(): Observable<usuario[]> {
+    const col = collection(this.firestore, 'usuarios');
+    return collectionData(col, { idField: 'id' }) as Observable<usuario[]>;
   }
 
   getUserbyEmail(correo:string){
@@ -101,4 +106,15 @@ export class AuthService{
     const usuario = this.getCurrentUser();
     return usuario ? usuario.esAdmin : false;
   }
+
+  esUsuarioEspecialista(){
+    const usuario = this.getCurrentUser();
+    return usuario ? usuario.esEspecialista : false;
+  }
+
+  esSesionActiva(){
+    return this.auth.currentUser != null;
+  }
+
+  
 }

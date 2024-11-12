@@ -1,0 +1,81 @@
+<form [formGroup]="altaFormPaciente" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+        <div class="col-sm-12">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" formControlName="nombre">
+            <div *ngIf="altaFormPaciente.get('nombre')?.invalid && altaFormPaciente.get('nombre')?.touched">
+                <p class="error-msg">Proporcione un Nombre válido. Solo letras. Máx. 50 caracteres.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" formControlName="apellido">
+            <div *ngIf="altaFormPaciente.get('apellido')?.invalid && altaFormPaciente.get('apellido')?.touched">
+                <p class="error-msg">Proporcione un Apellido válido. Solo letras. Máx. 50 caracteres.</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <label for="edad" class="form-label">Edad</label>
+            <input type="number" formControlName="edad">
+            <div *ngIf="altaFormPaciente.get('edad')?.invalid && altaFormPaciente.get('edad')?.touched">
+                <p class="error-msg">Proporcione una edad válida. Min. 18 y Máx. 65.</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="number" formControlName="dni">
+            <div *ngIf="altaFormPaciente.get('dni')?.invalid && altaFormPaciente.get('dni')?.touched">
+                <p class="error-msg">Proporcione un DNI válido. Mín. 7 y Máx. 8 dígitos.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">Obra Social</label>
+            <select formControlName="obra_social" class="form-select">
+                <option value="">Seleccione una opción...</option>
+                <option value="osecac">OSECAC - Obra Social de los Empleados de Comercio y Actividades Civiles</option>
+                <option value="osdepym">OSDEPYM - Obra Social de Empresarios, Profesionales y Monotributistas</option>
+                <option value="osdipp">OSDIPP - Obra Social del Personal de Dirección de la Industria Privada del Petroleo</option>
+                <option value="ospigpc">OSPIGPC - Obra Social del Personal de la Industria Gráfica de la Provincia de Córdoba</option>
+                <option value="osme">OSME - Obra Social para el Personal del Ministerio de Economía y de Obras y Servicios Públicos</option>
+                <option value="osfe">OSFE - Obra Social Ferroviaria</option>
+                <option value="ospesca">OSPESCA - Obra Social de Capitanes, Pilotos y Patrones de Pesca</option>
+                <option value="ase">ASE - Obra Social del Personal de Dirección Acción Social de Empresarios (A.S.E.)</option>
+            </select>
+            <div *ngIf="altaFormPaciente.get('obra_social')?.invalid && altaFormPaciente.get('obra_social')?.touched">
+                <p class="error-msg">Proporcione una Obra Social válida.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">Email</label>
+            <input type="text" formControlName="email">
+            <div *ngIf="altaFormPaciente.get('email')?.invalid && altaFormPaciente.get('email')?.touched">
+                <p class="error-msg">Proporcione un Email válido. Respete el formato.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">Contraseña</label>
+            <input type="password" formControlName="contrasena">
+            <div *ngIf="altaFormPaciente.get('contrasena')?.invalid && altaFormPaciente.get('contrasena')?.touched">
+                <p class="error-msg">Proporcione una contraseña válida. Mín. 6 caracteres.</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">1º Foto de Perfil</label>
+            <img [src]="perfil1src" alt="Foto de Perfil 1" width="150" height="150">
+            <input type="file" (change)="onFileSelected($event, 'perfil1')" accept="image/jpeg" style="margin-left: 25px;"/>
+            <div *ngIf="fotoPerfil1Error">
+                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <label class="form-label">2º Foto de Perfil</label>
+            <img [src]="perfil2src" alt="Foto de Perfil 2" width="150" height="150">
+            <input type="file" (change)="onFileSelected($event, 'perfil2')" accept="image/jpeg"  style="margin-left: 25px;"/>
+            <div *ngIf="fotoPerfil2Error">
+                <p class="error-msg">Seleccione una imagen válida. Máx 50Kb</p>
+            </div>
+        </div>
+        <re-captcha (resolved)="resolved($event)" siteKey="6LfDUnYqAAAAALtNr54ely-h7AOGwNQIDVc6FycU"></re-captcha>
+    </div>
+    <button class="w-100 btn btn-primary btn-lg" type="submit" [disabled]="!captchaResponse">Registrar Paciente</button>
+</form>

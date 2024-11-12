@@ -77,14 +77,8 @@ export class LoginComponent {
     this.contrasena = '';
   }
 
-  cargaUser(tipo:string){
-    if(tipo === 'paciente'){
-      this.correo = 'gijec46023@acroins.com'
-    }else if(tipo === 'especialista'){
-      this.correo = 'claudioeberle@gmail.com'
-    } else {
-      this.correo = 'mamopoy258@edectus.com'
-    }
+  cargaUser(email:string){
+    this.correo = email;
     this.contrasena = '123456'
   }
 }

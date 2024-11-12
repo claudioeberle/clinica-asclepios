@@ -1,18 +1,30 @@
 <div class="consola-container">
-    <button class="consola-button" (click)="goTo('usuarios')">
+    <button *ngIf="esAdmin" class="consola-button" (click)="goTo('usuarios')">
       <img src="../../../assets/iconos/usuarios-icon.svg" alt="usuarios-icon" />
       <span>Usuarios</span>
     </button>
-    <button class="consola-button" (click)="goTo('registro')">
+    <button *ngIf="esAdmin" class="consola-button" (click)="goTo('registro')">
       <img src="../../../assets/iconos/alta-usuario-icon.svg" alt="alta-usuario-icon" />
       <span>Alta Usuario</span>
     </button>
-    <button class="consola-button">
+    <button *ngIf="esAdmin" class="consola-button">
       <img src="../../../assets/iconos/turnos-icon.svg" alt="turnos-icon" />
       <span>Turnos</span>
     </button>
-    <button class="consola-button">
-      <img src="../../../assets/iconos/usuarios-icon.svg" alt="Icon 4" />
-      <span>Button 4</span>
+    <button *ngIf="esAdmin||esPaciente"class="consola-button" (click)="goTo('turno-alta')">
+      <img src="../../../assets/iconos/turnos-alta.svg" alt="Icon 4" />
+      <span>Pedir Turno</span>
+    </button>
+    <button *ngIf="esPaciente || esEspecialista" class="consola-button" (click)="goTo('usuarios')">
+      <img src="../../../assets/iconos/turnos-icon.svg" alt="usuarios-icon" />
+      <span>Mis Turnos</span>
+    </button>
+    <button class="consola-button" (click)="goTo('perfil')">
+      <img src="../../../assets/iconos/usuario-2-icon.svg" alt="alta-usuario-icon" />
+      <span>Mi perfil</span>
+    </button>
+    <button *ngIf="esEspecialista" class="consola-button">
+      <img src="../../../assets/iconos/usuarios-icon.svg" alt="turnos-icon" />
+      <span>Mis Pacientes</span>
     </button>
   </div>

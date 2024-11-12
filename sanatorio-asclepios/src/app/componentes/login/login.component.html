@@ -2,6 +2,32 @@
 <div class="modal-content">
   <button class="close-button" (click)="closeModal()">×</button>
   <h2>INICIAR SESIÓN</h2>
+  <div class="accesos">
+    <div class="acceso-item">
+      <img src="../../../assets/fotos/adm-1.jpg" alt="admin-1" (click)="cargaUser('tavine5834@gianes.com')">
+      <h4>Admin</h4>
+    </div>
+    <div class="acceso-item">
+      <img src="../../../assets/fotos/esp-1.jpg" alt="esp-1" (click)="cargaUser('raxam45522@gianes.com')">
+      <h4>Médico 1</h4>
+    </div>
+    <div class="acceso-item">
+      <img src="../../../assets/fotos/esp-2.jpg" alt="esp-2" (click)="cargaUser('	nasileb245@cironex.com')">
+      <h4>Médica 1</h4>
+    </div>
+    <div class="acceso-item">
+      <img src="../../../assets/fotos/pac-1.jpg" alt="pac-1" (click)="cargaUser('kabatel494@edectus.com')">
+      <h4>Paciente 1</h4>
+    </div>
+    <div class="acceso-item">
+      <img src="../../../assets/fotos/pac-2.jpg" alt="pac-2" (click)="cargaUser('gogic48067@anypng.com')">
+      <h4>Paciente 2</h4>
+    </div>
+    <div class="acceso-item">
+      <img src="../../../assets/fotos/pac-3.jpg" alt="pac-3" (click)="cargaUser('nifaker777@anypng.com')">
+      <h4>Paciente 3</h4>
+    </div>
+  </div>
   <form (submit)="IniciarSesion()">
     <div class="input">
       <label for="email">Email</label>
@@ -14,9 +40,5 @@
     <p class="prompt">{{prompt}}</p>
     <button type="submit" (click)="IniciarSesion()">Iniciar Sesión</button>
     <button type="button" (click)="onRegister()">Registrarse</button>
-    <button class="acceso" (click)="cargaUser('paciente')">Paciente</button>
-    <button class="acceso" (click)="cargaUser('especialista')">Especialista</button>
-    <button class="acceso" (click)="cargaUser('admin')">Administrador</button>
-
   </form>
 </div>
