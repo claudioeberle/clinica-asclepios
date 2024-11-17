@@ -39,12 +39,12 @@ export class RegistroAdminComponent {
     private spinnerService:SpinnerService,
   ) {
     this.altaFormAdmin = this.fb.group({
-      nombre: ['', Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]*$'), Validators.maxLength(50)],
-      apellido: ['', Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]*$'), Validators.maxLength(50)],
-      edad: ['', [Validators.required, Validators.min(18), Validators.max(65)]],
-      dni: ['', Validators.required, Validators.min(1000000), Validators.max(99000000)],
+      nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$'), Validators.maxLength(20)]],
+      apellido: ['', [Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]'), Validators.maxLength(50)]],
+      edad: ['', [Validators.required, Validators.min(0), Validators.max(65)]],
+      dni: ['', [Validators.required, Validators.min(1000000), Validators.max(99000000)]],
       email: ['', [Validators.required, Validators.email]],
-      contrasena: ['', Validators.required, Validators.minLength(6)],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]],
       perfil1: ['', Validators.required],
     });
   }

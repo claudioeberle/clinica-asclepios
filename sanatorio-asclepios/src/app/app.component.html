@@ -21,8 +21,6 @@
     <nav>
         <a *ngIf="!usuario" (click)="goTo('home')" (click)="toggleSidebar()">Home</a>
         <a *ngIf="usuario" (click)="goTo('servicios')" (click)="toggleSidebar()">Servicios</a>
-        <a (click)="goTo('about')" (click)="toggleSidebar()">Quiénes Somos</a>
-        <a (click)="goTo('especialidades')" (click)="toggleSidebar()">Especialidades</a>
         <a (click)="goTo('contacto')" (click)="toggleSidebar()">Contacto</a>
     </nav>
   </div>

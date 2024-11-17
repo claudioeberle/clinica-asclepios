@@ -21,10 +21,9 @@ export class RegistroPacienteComponent {
 
   public altaFormPaciente: FormGroup;
   public prompt:string = '';
-  public tipoRegistro: string = '';
   public isOtraEspecialidad = false;
-  public fotoPerfil1Error = false;
-  public fotoPerfil2Error = false;
+  public fotoPerfil1Error = true;
+  public fotoPerfil2Error = true;
   public fotoPerfil1Base64: string | null = null;
   public fotoPerfil2Base64: string | null = null;
   public perfil1src = "https://placehold.co/150";
@@ -49,13 +48,13 @@ export class RegistroPacienteComponent {
   ) {
 
     this.altaFormPaciente = this.fb.group({
-      nombre: ['', Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]*$'), Validators.maxLength(50)],
-      apellido: ['', Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]*$'), Validators.maxLength(50)],
-      edad: ['', [Validators.required, Validators.min(18), Validators.max(65)]],
-      dni: ['', Validators.required, Validators.min(1000000), Validators.max(99000000)],
+      nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$'), Validators.maxLength(20)]],
+      apellido: ['', [Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]'), Validators.maxLength(50)]],
+      edad: ['', [Validators.required, Validators.min(0), Validators.max(65)]],
+      dni: ['', [Validators.required, Validators.min(1000000), Validators.max(99000000)]],
       obra_social: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contrasena: ['', Validators.required, Validators.minLength(6)],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]],
       perfil1: ['', Validators.required],
       perfil2: ['', Validators.required],
 
@@ -160,8 +159,10 @@ export class RegistroPacienteComponent {
     }else {
       this.altaFormPaciente.markAllAsTouched();
       console.log('Datos incorrectos!');
-      console.log('tipo: ' + this.tipoRegistro);
       console.log('Formulario inválido:', this.altaFormPaciente.errors);
+      console.log('p1 ' + this.fotoPerfil1Error)
+      console.log('p2 ' + this.fotoPerfil1Error)
+
       return;
     }
 
@@ -181,15 +182,15 @@ export class RegistroPacienteComponent {
           text: "Hemos enviado un email a " + this.email,
           icon: "info"
         });
-        console.log(`${this.tipoRegistro} guardado exitosamente!`);
+        console.log(`Guardado exitosamente!`);
       }     
     } catch (error) {
       Swal.fire({
         title: "Error Guardado",
-        text: `Error al guardar el ${this.tipoRegistro}: `,
+        text: `Error al intentar crear el nuevo Paciente`,
         icon: "error"
       });
-      console.error(`Error al guardar el ${this.tipoRegistro}: `, error);
+      console.error(`Error al guardar el Paciente`, error);
     }
   }
 

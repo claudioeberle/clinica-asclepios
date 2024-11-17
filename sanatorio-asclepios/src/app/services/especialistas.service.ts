@@ -9,6 +9,8 @@ import { usuario } from '../interfaces/usuario';
 })
 export class EspecialistasService {
 
+  allEspecialistas: any[] = [];
+
   constructor(private firestore:Firestore, private authService:AuthService) { }
 
   GetAllEspecialistas(): Observable<usuario[]> {
@@ -17,6 +19,14 @@ export class EspecialistasService {
     );
   }
 
-  
+  GetEspecialistasByEspecialidad(especialidad: string): Observable<usuario[]> {
+    return this.GetAllEspecialistas().pipe(
+      map((especialistas) =>
+        especialistas.filter((especialista) => 
+          especialista.especialidad.split(',').map((e) => e.trim().toLowerCase()).includes(especialidad.toLowerCase())
+        )
+      )
+    );
+  }
 
 }

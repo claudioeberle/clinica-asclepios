@@ -1,43 +1,90 @@
+<div class="titulo"><h2>Nuevo Turno</h2></div>
 <div class="container">
-  <div *ngIf="pasoActual === 1">
+  <div class="block-especialista-p" *ngIf="!paciente">
+    <h2>Seleccionar Paciente</h2>
+    <div class="select-especialista-p">
+      <div *ngFor="let paciente of pacientes" class="card">
+        <img
+          [src]="paciente.perfil1"
+          alt="Foto de {{ paciente.nombre }} {{ paciente.apellido }}"
+          class="profile-pic"
+        />
+        <h3>{{ paciente.nombre }} {{ paciente.apellido }}</h3>
+        <button class="btn btn-primary" (click)="seleccionarPaciente(paciente)">Seleccionar</button>
+      </div>
+    </div>
+  </div>
+  <div class="especialista-seleccionado" *ngIf="paciente">
+    <h2>Paciente:</h2>
+    <h2 class="nombre-especialista">{{ paciente.nombre }} {{ paciente.apellido }}</h2>
+  </div>
+  <div class="block-especialista" *ngIf="!especialistaSeleccionado && paciente">
     <h2>Seleccionar Especialista</h2>
-    <div *ngFor="let especialista of especialistas" class="card">
-      <h3>{{ especialista.nombre }} {{ especialista.apellido }}</h3>
-      <button class="btn btn-primary" (click)="seleccionarEspecialista(especialista)">Seleccionar</button>
+    <div class="select-especialista" *ngIf="pasoActual === 1">
+      <div *ngFor="let especialista of especialistas" class="card">
+        <img
+          [src]="especialista.perfil1"
+          alt="Foto de {{ especialista.nombre }}"
+          class="profile-pic"
+        />
+        <h3>{{ especialista.nombre }} {{ especialista.apellido }}</h3>
+        <button class="btn btn-primary" (click)="seleccionarEspecialista(especialista)">Seleccionar</button>
+      </div>
     </div>
   </div>
-
-  <div *ngIf="pasoActual === 2">
-    <h2>Elegir Especialidad</h2>
-    <div *ngFor="let especialidad of especialidades" class="card">
-      <h3>{{ especialidad }}</h3>
-      <button class="btn btn-primary" (click)="seleccionarEspecialidad(especialidad)">Seleccionar</button>
-    </div>
+  <div class="especialista-seleccionado" *ngIf="especialistaSeleccionado">
+    <h2>Especialista:</h2>
+    <h2 class="nombre-especialista">{{ especialistaSeleccionado.nombre }} {{ especialistaSeleccionado.apellido }}</h2>
   </div>
 
-  <div *ngIf="pasoActual === 3">
-    <h2>Seleccionar Día Disponible</h2>
-    <div *ngFor="let dia of diasDisponibles" class="card">
-      <h3>{{ dia | date: 'fullDate' }}</h3>
-      <button class="btn btn-primary" (click)="seleccionarDia(dia)">Seleccionar</button>
+  <div *ngIf="especialistaSeleccionado && !especialidadSeleccionada" class="block-especialista">
+    <h2>Seleccionar Especialidad</h2>
+    <div class="select-especialidad">
+      <div *ngFor="let especialidad of especialidades" class="card-especialidad" (click)="seleccionarEspecialidad(especialidad)">
+        <img 
+        [src]="getImagenEspecialidad(especialidad)" 
+        (error)="onImageError($event)"
+        alt="Imagen de {{ especialidad }}"
+        class="especialidad-img"
+      />
+        <h3>{{ especialidad }}</h3>
+      </div>
     </div>
   </div>
-
-  <div *ngIf="pasoActual === 4">
-    <h2>Seleccionar Turno Disponible</h2>
-    <div *ngFor="let turno of turnosDisponibles" class="card">
-      <h3>{{ turno }}</h3>
-      <button class="btn btn-primary" (click)="seleccionarTurno(turno)">Seleccionar</button>
+  <div class="especialista-seleccionado" *ngIf="especialidadSeleccionada">
+    <h2>Especialidad:</h2>
+    <h2 class="nombre-especialista">{{especialidadSeleccionada}}</h2>
+  </div>
+  <div *ngIf="especialidadSeleccionada && !fechaSeleccionada" class="block-especialista">
+    <h2>Seleccionar Día</h2>
+    <div *ngFor="let dia of diasDisponibles">
+      <button class="btn btn-primary" (click)="seleccionarDia(dia)"><h3 >{{ dia }}</h3></button>
     </div>
   </div>
+  <div class="especialista-seleccionado" *ngIf="fechaSeleccionada">
+    <h2>Fecha:</h2>
+    <h2 class="nombre-especialista">{{fechaSeleccionada}}</h2>
+  </div>
+  <div *ngIf="fechaSeleccionada && !turnoSeleccionado" class="block-especialista">
+    <h2>Turnos disponibles el {{ fechaSeleccionada }}</h2>
+    <div class="select-turnos">
+      <button 
+        *ngFor="let turno of turnosDisponibles" 
+        class="btn btn-primary" 
+        (click)="seleccionarTurno(turno)">
+        <h3>{{ turno }}</h3>
+      </button>
+    </div>
+  </div>
+  <div class="especialista-seleccionado" *ngIf="turnoSeleccionado">
+    <h2>Turno:</h2>
+    <h2 class="nombre-especialista">{{turnoSeleccionado}}</h2>
+  </div>
 
-  <div *ngIf="pasoActual === 5">
+
+  <div *ngIf="turnoSeleccionado" class="confirmacion">
     <h2>Confirmar Turno</h2>
-    <h4>Especialista: {{ especialistaSeleccionado?.nombre }} {{ especialistaSeleccionado?.apellido }}</h4>
-    <h4>Especialidad: {{ especialidadSeleccionada }}</h4>
-    <h4>Día: {{ diaSeleccionado | date: 'fullDate' }}</h4>
-    <h4>Hora: {{ turnoSeleccionado }}</h4>
     <button class="btn btn-primary" (click)="confirmarTurno()">Confirmar</button>
-    <button class="btn btn-secondary" (click)="cancelarTurno()">Cancelar</button>
+    <button class="btn btn-secondary" (click)="reiniciarProceso()">Cancelar</button>
   </div>
 </div>

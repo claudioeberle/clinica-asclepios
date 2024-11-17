@@ -1,38 +1,93 @@
 .card {
-    border: 1px solid #ddd;
-    padding: 16px;
-    margin: 8px;
-    display: inline-block;
-    width: 200px;
-    text-align: center;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 5px;
+  width: 200px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.block-especialista-p {
+  display: flex;
+  background-color: rgb(48, 120, 180);
+  padding: 10px;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.select-especialista-p {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.card-especialidad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 50%;
+  width: 130px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: beige;
+  font-weight: bold;
+}
+
+.block-especialista {
+  display: flex;
+  background-color: rgb(48, 120, 180);
+  padding: 10px;
+  width: 100vw;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.especialista-seleccionado {
+  background-color: rgb(48, 120, 180);
+  padding: 10px;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.especialista-seleccionado h2 {
+  margin: 5px 0;
+}
+
+.nombre-especialista {
+  font-weight: normal;
+}
   
+.profile-pic{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.especialidad-img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 0.5rem;
+}
+
+
+.select-especialista{
+  display: flex;
+  justify-items: auto;
+  margin-bottom: 10px;
+}
+
   h2{
     color: white;
     margin-left: 25px;
-  }
-
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
-  }
-  
-  .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 24px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 0;
-    width: 300px;
-    text-align: center;
   }
   
   .btn {
@@ -40,7 +95,7 @@
   }
 
   .container{
-    margin-left: 50px;
+    margin-left: 0;
   }
 
   h2{
@@ -51,4 +106,50 @@
     color: white;
     font-size: 20px;
   }
+
+  h3 {
+    text-align: center;
+  }
+
+  .titulo {
+    display: flex;
+    justify-content: center;
+    background-color: #5f83b1;
+    width: 100%;
+    margin-top: 0;
+    padding: 10px;
+  }
+
+  .titulo h2{
+    font-size: x-large;
+    font-weight: bold;
+  }
+
+  .select-especialidad {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
   
+  .especialidad-seleccionada {
+    background-color: rgb(48, 120, 180);
+    padding: 10px;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  .nombre-especialidad {
+    font-weight: normal;
+  }
+
+  .confirmacion{
+    background-color: white;
+    font-weight: bold;
+    margin-bottom: 100px;
+  }
+
+  .confirmacion h2{
+    color: rgb(9, 26, 75);
+  }

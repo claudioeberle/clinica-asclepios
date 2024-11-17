@@ -2,9 +2,8 @@ import { Injectable, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, sendEmailVerification, signInWithEmailAndPassword, User } from '@angular/fire/auth';
 import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 import { usuario } from '../interfaces/usuario';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -47,16 +46,16 @@ export class AuthService{
     return this.usuarioSubject.getValue();
   }
 
-  /*getAllUsers(){
-    const col = collection(this.firestore, 'usuarios');
-    const dataObservable = collectionData(col);
-    //dataObservable.subscribe(data => console.log('Data from Firestore:', data));
-    return dataObservable;
-  }*/
 
   getAllUsers(): Observable<usuario[]> {
     const col = collection(this.firestore, 'usuarios');
     return collectionData(col, { idField: 'id' }) as Observable<usuario[]>;
+  }
+
+  GetAllPacientes(): Observable<usuario[]> {
+    return this.getAllUsers().pipe(
+      map((usuarios) => usuarios.filter(usuario => usuario.esPaciente === true))
+    );
   }
 
   getUserbyEmail(correo:string){

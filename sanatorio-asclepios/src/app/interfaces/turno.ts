@@ -1,11 +1,11 @@
+import { usuario } from "./usuario"
+
 export interface Turno{
-    inicio:Date,
-    fin:Date,
-    dia:number,
-    fecha:number,
-    ano:number,
-    paciente:string,
-    especialista:string,
-    especialidad:string,
+    inicio:string | null,
+    fecha:string | null,
+    ano:string,
+    paciente:usuario | null,
+    especialista:usuario | null,
+    especialidad:string | null,
     otorgado:boolean
 }

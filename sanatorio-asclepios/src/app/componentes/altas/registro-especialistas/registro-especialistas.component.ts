@@ -43,13 +43,13 @@ export class RegistroEspecialistasComponent {
     private especialidadesService:EspecialidadesService
   ) {
     this.altaFormEspecialista = this.fb.group({
-      nombre: ['', [Validators.required]],
-      apellido: ['', [Validators.required]],
-      edad: ['', [Validators.required]],
-      dni: ['', [Validators.required]],
+      nombre: ['', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$'), Validators.maxLength(20)]],
+      apellido: ['', [Validators.required, Validators.pattern('[A-Za-zÀ-ÿ ]'), Validators.maxLength(50)]],
+      edad: ['', [Validators.required, Validators.min(0), Validators.max(65)]],
+      dni: ['', [Validators.required, Validators.min(1000000), Validators.max(99000000)]],
       especialidad: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required]],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]],
       perfil1: ['', Validators.required],
     });
   }
@@ -79,7 +79,9 @@ export class RegistroEspecialistasComponent {
     this.especialidadesElegidas.push(nombre);
   }
 
-  agregarNuevaEspecialidad(nuevaEspecialidad:string) {
+  agregarNuevaEspecialidad(input: HTMLInputElement) {
+    const nuevaEspecialidad = input.value.trim();
+
     if (nuevaEspecialidad.trim() === '') {
       Swal.fire({
         title: "Campo vacío",
@@ -91,6 +93,7 @@ export class RegistroEspecialistasComponent {
   
     console.log('Nueva especialidad: ' + nuevaEspecialidad);
     this.especialidadesService.agregarEspecialidad(nuevaEspecialidad.trim());
+    input.value = '';
   }
 
   onFileSelected(event: Event, perfil: string) {

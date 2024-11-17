@@ -11,7 +11,7 @@
   display: flex;
   padding: 1rem;
   width: 40%;
-  height: auto;
+  height: 90%;
 }
 
 .perfil-foto {
@@ -39,9 +39,14 @@
 }
 
 .disponibilidad-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: white;
   padding: 1rem;
   margin-left: 20px;
+  width: 60%;
+  height: 90%;
 }
 
 .disponibilidad-table {
@@ -49,6 +54,7 @@
   border-collapse: collapse;
   margin-top: 1rem;
   font-size: 20px;
+  margin-bottom: 30px;
 }
 
 .disponibilidad-table th, .disponibilidad-table td {
@@ -58,7 +64,7 @@
 }
 
 .disponibilidad-table th {
-  background-color: #f4f4f4;
+  background-color: #307183;
   font-weight: bold;
 }
 
@@ -86,6 +92,7 @@ button.inactivo {
   width: 100%;
   padding: 15px 0;
   margin-top: 0;
+  margin-bottom: 20px;
   font-size: xx-large;
   color: white;
 }

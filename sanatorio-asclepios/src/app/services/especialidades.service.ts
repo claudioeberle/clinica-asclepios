@@ -4,6 +4,7 @@ import { especialidad } from '../interfaces/especialidad';
 import Swal from 'sweetalert2';
 import { Title } from '@angular/platform-browser';
 import { firstValueFrom, Observable } from 'rxjs';
+import { usuario } from '../interfaces/usuario';
 
 
 @Injectable({
@@ -34,7 +35,7 @@ export class EspecialidadesService {
 
   async agregarEspecialidad(nuevaE: string) {
     try {
-      nuevaE = nuevaE.toLowerCase();
+      nuevaE = nuevaE.trim().toLowerCase();
       nuevaE = nuevaE.charAt(0).toUpperCase() + nuevaE.slice(1);
   
       const col = collection(this.firestore, 'especialidades');
@@ -58,8 +59,8 @@ export class EspecialidadesService {
         icon: "success"
       });
   
-    } catch (e) {
-      console.error("Error al agregar la especialidad: ", e);
+    } catch (error) {
+      console.error("Error al agregar la especialidad: ", error);
       Swal.fire({
         title: "Error al guardar nueva especialidad",
         text: "No se pudo guardar la especialidad " + nuevaE,
@@ -72,23 +73,20 @@ export class EspecialidadesService {
   async obtenerEspecialidadesPorEmail(email: string): Promise<string[]> {
     try {
       const col = collection(this.firestore, 'usuarios');
-      const dataObservable = collectionData(col, { idField: 'id' });
+      const dataObservable = collectionData(col, { idField: 'id' }) as Observable<usuario[]>;
   
-      const dataArray = await firstValueFrom(dataObservable); // Obtén los datos desde Firestore
+      const dataArray: usuario[] = await firstValueFrom(dataObservable);
   
-      // Filtrar por el email y obtener las especialidades
-      this.especialidadesXmail = dataArray
-        .filter((data: any) => data.email === email) // Filtrar por email
-        .map((data: any) => data.especialidad) // Obtener especialidades
-        .flatMap((especialidad: string) => especialidad.split(',').map(e => e.trim())); // Convertir la cadena de texto a array y eliminar espacios extra
+      const especialidades = dataArray
+        .filter(user => user.email === email && user.especialidad)
+        .flatMap(user => user.especialidad.split(',').map(e => e.trim()));
   
-      console.log('Especialidades:', this.especialidadesXmail);
-      return this.especialidadesXmail;
+      console.log('Especialidades obtenidas:', especialidades);
+      return especialidades;
   
-    } catch (e) {
-      console.error("Error al obtener especialidades:", e);
+    } catch (error) {
+      console.error("Error al obtener especialidades:", error);
       return [];
     }
   }
-
 }
