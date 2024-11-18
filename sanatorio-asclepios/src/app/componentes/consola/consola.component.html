@@ -7,15 +7,15 @@
       <img src="../../../assets/iconos/alta-usuario-icon.svg" alt="alta-usuario-icon" />
       <span>Alta Usuario</span>
     </button>
-    <button *ngIf="esAdmin" class="consola-button">
+    <button *ngIf="esAdmin" class="consola-button" (click)="goTo('turnos')">
       <img src="../../../assets/iconos/turnos-icon.svg" alt="turnos-icon" />
       <span>Turnos</span>
     </button>
-    <button *ngIf="esAdmin||esPaciente"class="consola-button" (click)="goTo('turno-alta')">
+    <button *ngIf="esAdmin||esPaciente"class="consola-button" (click)="goTo('turnos-alta')">
       <img src="../../../assets/iconos/turnos-alta.svg" alt="Icon 4" />
       <span>Pedir Turno</span>
     </button>
-    <button *ngIf="esPaciente || esEspecialista" class="consola-button" (click)="goTo('usuarios')">
+    <button *ngIf="esPaciente || esEspecialista" class="consola-button" (click)="goToMisTurnos()">
       <img src="../../../assets/iconos/turnos-icon.svg" alt="usuarios-icon" />
       <span>Mis Turnos</span>
     </button>

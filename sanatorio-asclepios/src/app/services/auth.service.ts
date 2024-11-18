@@ -115,5 +115,10 @@ export class AuthService{
     return this.auth.currentUser != null;
   }
 
+  getCurrentUserEmail(){
+    const usuario = this.getCurrentUser();
+    return usuario.email;
+  }
+
   
 }

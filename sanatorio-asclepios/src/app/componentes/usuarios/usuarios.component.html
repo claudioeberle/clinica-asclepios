@@ -1,96 +1,101 @@
-<div class="select-tipo">
-    <label for="userType">Filtrar por tipo de usuario: </label>
-    <select id="userType" [(ngModel)]="tipoSeleccionado">
-        <option value="">Elija una opción...</option>
-        <option value="Paciente">Pacientes</option>
-        <option value="Especialista">Especialistas</option>
-        <option value="Administrador">Administradores</option>
-    </select>
+<div class="container">
+    <div class="select-tipo">
+        <label for="userType">Filtrar por tipo de usuario: </label>
+        <select id="userType" [(ngModel)]="tipoSeleccionado">
+            <option value="">Elija una opción...</option>
+            <option value="Paciente">Pacientes</option>
+            <option value="Especialista">Especialistas</option>
+            <option value="Administrador">Administradores</option>
+        </select>
+    </div>
+    
+    <table class="table table-striped" *ngIf="tipoSeleccionado === 'Paciente' && (usuarios$ | async) as usuarios">
+        <thead>
+            <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Obra Social</th>
+            <th>Email</th>
+            <th>Foto 1</th>
+            <th>Foto 2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
+            <td *ngIf="usr.esPaciente">{{ usr.nombre }}</td>
+            <td *ngIf="usr.esPaciente">{{ usr.apellido }}</td>
+            <td *ngIf="usr.esPaciente">{{ usr.edad }}</td>
+            <td *ngIf="usr.esPaciente">{{ usr.dni }}</td>
+            <td *ngIf="usr.esPaciente">{{ usr.obra_social }}</td>
+            <td *ngIf="usr.esPaciente">{{ usr.email }}</td>
+            <td *ngIf="usr.esPaciente">
+                <img [src]="(usr | fotoUsuario:1)" alt="Foto de perfil 1" class="img-thumbnail" style="width: 100px; height: 100px;">
+            </td>
+            <td *ngIf="usr.esPaciente">
+                <img [src]="(usr | fotoUsuario:2)" alt="Foto de perfil 2" class="img-thumbnail" style="width: 100px; height: 100px;">
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="table table-striped" *ngIf="tipoSeleccionado === 'Especialista' && (usuarios$ | async) as usuarios">
+        <thead>
+            <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Especialidades</th>
+            <th>Email</th>
+            <th>Cuenta Habilitada</th>
+            <th>Perfil 1</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
+            <td *ngIf="usr.esEspecialista">{{ usr.nombre }}</td>
+            <td *ngIf="usr.esEspecialista">{{ usr.apellido }}</td>
+            <td *ngIf="usr.esEspecialista">{{ usr.edad }}</td>
+            <td *ngIf="usr.esEspecialista">{{ usr.dni }}</td>
+            <td *ngIf="usr.esEspecialista">{{ usr.especialidad }}</td>
+            <td *ngIf="usr.esEspecialista">{{ usr.email }}</td>
+            <td><button *ngIf="usr.esEspecialista" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida | cuentaValida }}</button></td>
+            <td *ngIf="usr.esEspecialista">
+                <img [src]="(usr | fotoUsuario)" alt="Foto de perfil" class="img-thumbnail" style="width: 100px; height: 100px;">
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="table table-striped" *ngIf="tipoSeleccionado === 'Administrador' && (usuarios$ | async) as usuarios">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Cuenta Habilitada</th>
+            <th>Perfil 1</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
+                <td *ngIf="usr.esAdmin">{{ usr.nombre }}</td>
+                <td *ngIf="usr.esAdmin">{{ usr.apellido }}</td>
+                <td *ngIf="usr.esAdmin">{{ usr.edad }}</td>
+                <td *ngIf="usr.esAdmin">{{ usr.dni }}</td>
+                <td *ngIf="usr.esAdmin">{{ usr.email }}</td>
+                <td><button *ngIf="usr.esAdmin" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida | cuentaValida }}</button></td>
+                <td *ngIf="usr.esAdmin">
+                    <img [src]="(usr | fotoUsuario)" alt="Foto de perfil" class="img-thumbnail" style="width: 100px; height: 100px;">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="descarga">
+        <button *ngIf="tipoSeleccionado" class="btn btn-success mt-3" (click)="exportarExcel(tipoSeleccionado)">Descargar Excel</button>
+    </div>
 </div>
-
-<table class="table table-striped" *ngIf="tipoSeleccionado === 'Paciente' && (usuarios$ | async) as usuarios">
-    <thead>
-        <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Edad</th>
-        <th>DNI</th>
-        <th>Obra Social</th>
-        <th>Email</th>
-        <th>Foto 1</th>
-        <th>Foto 2</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
-        <td *ngIf="usr.esPaciente">{{ usr.nombre }}</td>
-        <td *ngIf="usr.esPaciente">{{ usr.apellido }}</td>
-        <td *ngIf="usr.esPaciente">{{ usr.edad }}</td>
-        <td *ngIf="usr.esPaciente">{{ usr.dni }}</td>
-        <td *ngIf="usr.esPaciente">{{ usr.obra_social }}</td>
-        <td *ngIf="usr.esPaciente">{{ usr.email }}</td>
-        <td *ngIf="usr.esPaciente">
-            <img [src]="(usr | fotoUsuario:1)" alt="Foto de perfil 1" class="img-thumbnail" style="width: 100px; height: 100px;">
-        </td>
-        <td *ngIf="usr.esPaciente">
-            <img [src]="(usr | fotoUsuario:2)" alt="Foto de perfil 2" class="img-thumbnail" style="width: 100px; height: 100px;">
-        </td>
-        </tr>
-    </tbody>
-</table>
-
-<table class="table table-striped" *ngIf="tipoSeleccionado === 'Especialista' && (usuarios$ | async) as usuarios">
-    <thead>
-        <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Edad</th>
-        <th>DNI</th>
-        <th>Especialidades</th>
-        <th>Email</th>
-        <th>Cuenta Habilitada</th>
-        <th>Perfil 1</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
-        <td *ngIf="usr.esEspecialista">{{ usr.nombre }}</td>
-        <td *ngIf="usr.esEspecialista">{{ usr.apellido }}</td>
-        <td *ngIf="usr.esEspecialista">{{ usr.edad }}</td>
-        <td *ngIf="usr.esEspecialista">{{ usr.dni }}</td>
-        <td *ngIf="usr.esEspecialista">{{ usr.especialidad }}</td>
-        <td *ngIf="usr.esEspecialista">{{ usr.email }}</td>
-        <td><button *ngIf="usr.esEspecialista" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida | cuentaValida }}</button></td>
-        <td *ngIf="usr.esEspecialista">
-            <img [src]="(usr | fotoUsuario)" alt="Foto de perfil" class="img-thumbnail" style="width: 100px; height: 100px;">
-        </td>
-        </tr>
-    </tbody>
-</table>
-
-<table class="table table-striped" *ngIf="tipoSeleccionado === 'Administrador' && (usuarios$ | async) as usuarios">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Edad</th>
-        <th>DNI</th>
-        <th>Email</th>
-        <th>Cuenta Habilitada</th>
-        <th>Perfil 1</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado">
-        <td *ngIf="usr.esAdmin">{{ usr.nombre }}</td>
-        <td *ngIf="usr.esAdmin">{{ usr.apellido }}</td>
-        <td *ngIf="usr.esAdmin">{{ usr.edad }}</td>
-        <td *ngIf="usr.esAdmin">{{ usr.dni }}</td>
-        <td *ngIf="usr.esAdmin">{{ usr.email }}</td>
-        <td><button *ngIf="usr.esAdmin" type="button" class="btn btn-primary" (click)="activarUsuario(usr)">{{ usr.cuenta_valida | cuentaValida }}</button></td>
-        <td *ngIf="usr.esAdmin">
-            <img [src]="(usr | fotoUsuario)" alt="Foto de perfil" class="img-thumbnail" style="width: 100px; height: 100px;">
-        </td>
-      </tr>
-    </tbody>
-</table>

@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="titulo"><h2>Mis Turnos</h2></div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Especialidad</th>
+        <th>Especialista</th>
+        <th>Fecha</th>
+        <th>Horario</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnos">
+        <td>{{ turno.especialidad }}</td>
+        <td>{{ turno.especialista?.nombre }} {{ turno.especialista?.apellido }}</td>
+        <td>{{ turno.fecha }}</td>
+        <td>{{ turno.inicio }}</td>
+        <td>{{ turno.estado }}</td>
+        <td>
+          <!-- Cancelar Turno -->
+          <button 
+            *ngIf="turno.estado === 'pendiente'" 
+            class="btn btn-danger btn-sm" 
+            (click)="cancelarTurno(turno)"
+          >
+            Cancelar
+          </button>
+
+          <!-- Reseña -->
+          <button 
+            *ngIf="turno.comentarioResena" 
+            class="btn btn-info btn-sm" 
+            (click)="verResena(turno)"
+          >
+            Ver Reseña
+          </button>
+
+          <!-- Encuesta -->
+          <button 
+            *ngIf="turno.estado === 'realizado' && turno.comentarioResena && !turno.encuestaCompleta" 
+            class="btn btn-success btn-sm" 
+            (click)="completarEncuesta(turno)"
+          >
+            Completar Encuesta
+          </button>
+
+          <!-- Calificación -->
+          <button 
+            *ngIf="turno.estado === 'realizado' && !turno.calificacionAtencion" 
+            class="btn btn-warning btn-sm" 
+            (click)="calificarAtencion(turno)"
+          >
+            Calificar Atención
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -10,6 +10,8 @@ import { UsuariosService } from '../../services/usuarios.service';
 import { SpinnerService } from '../../services/spinner.service';
 import { CuentaValidaPipe } from '../../pipes/cuenta-valida.pipe';
 import { FotoUsuarioPipe } from '../../pipes/foto-usuario.pipe';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-usuarios',
@@ -68,5 +70,62 @@ export class UsuariosComponent implements OnInit{
       this.spinnerService.hide();
     }, 1000);
   }
+
+  async exportarExcel(tipo: string): Promise<void> {
+    this.usuarios$.subscribe((usuarios) => {
+      // Filtrar usuarios según el tipo seleccionado
+      const usuariosFiltrados = usuarios.filter((usr) => {
+        if (tipo === 'Paciente') return usr.esPaciente;
+        if (tipo === 'Especialista') return usr.esEspecialista;
+        if (tipo === 'Administrador') return usr.esAdmin;
+        return false;
+      });
+
+      // Crear datos para la tabla
+      const datosExcel = usuariosFiltrados.map((usr) => ({
+        Nombre: usr.nombre,
+        Apellido: usr.apellido,
+        Edad: usr.edad,
+        DNI: usr.dni,
+        ...(tipo === 'Paciente' && {
+          'Obra Social': usr.obra_social,
+        }),
+        ...(tipo === 'Especialista' && {
+          Especialidades: usr.especialidad,
+          'Cuenta Habilitada': usr.cuenta_valida ? 'Sí' : 'No',
+        }),
+        Email: usr.email,
+      }));
+
+      // Crear libro de Excel
+      const hoja = XLSX.utils.json_to_sheet(datosExcel);
+      const libro = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(libro, hoja, 'Usuarios');
+
+      // Descargar archivo
+      const nombreArchivo = `Usuarios_${tipo}.xlsx`;
+      XLSX.writeFile(libro, nombreArchivo);
+    });
+  }
+
+  obtenerEncabezados(tipo: string): string[] {
+    switch (tipo) {
+      case 'Paciente':
+        return ['nombre', 'apellido', 'edad', 'dni', 'obra_social', 'email'];
+      case 'Especialista':
+        return ['nombre', 'apellido', 'edad', 'dni', 'especialidad', 'email', 'cuenta_valida'];
+      case 'Administrador':
+        return ['nombre', 'apellido', 'edad', 'dni', 'email', 'cuenta_valida'];
+      default:
+        return [];
+    }
+  }
+
+  guardarArchivoExcel(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    saveAs(data, `${fileName}.xlsx`);
+  }
+
+
 
 }

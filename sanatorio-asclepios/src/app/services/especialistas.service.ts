@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { collection, collectionData, Firestore, query, where } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { map, Observable } from 'rxjs';
 import { usuario } from '../interfaces/usuario';
@@ -27,6 +27,12 @@ export class EspecialistasService {
         )
       )
     );
+  }
+
+  getEspecialistasPorEspecialidad(especialidad: string): Observable<any[]> {
+    const especialistasCollection = collection(this.firestore, 'usuarios');
+    const q = query(especialistasCollection, where('especialidad', 'array-contains', especialidad));
+    return collectionData(q, { idField: 'id' }) as Observable<any[]>;
   }
 
 }

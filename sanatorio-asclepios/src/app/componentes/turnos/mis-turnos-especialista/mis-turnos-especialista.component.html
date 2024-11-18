@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="titulo"><h2>Mis Turnos</h2></div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Especialidad</th>
+        <th>Paciente</th>
+        <th>Fecha</th>
+        <th>Horario</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnos">
+        <td>{{ turno.especialidad }}</td>
+        <td>{{ turno.paciente?.nombre }} {{ turno.paciente?.apellido }}</td>
+        <td>{{ turno.fecha }}</td>
+        <td>{{ turno.inicio }}</td>
+        <td>{{ turno.estado }}</td>
+        <td>
+          <!-- Cancelar Turno -->
+          <button 
+            *ngIf="turno.estado !== 'aceptado' && turno.estado !== 'realizado' && turno.estado !== 'rechazado' && turno.estado !== 'cancelado'" 
+            class="btn btn-danger btn-sm" 
+            (click)="cancelarTurno(turno)"
+          >
+            Cancelar
+          </button>
+
+          <!-- Rechazar Turno -->
+          <button 
+            *ngIf="turno.estado !== 'aceptado' && turno.estado !== 'realizado' && turno.estado !== 'cancelado' && turno.estado !== 'rechazado'" 
+            class="btn btn-warning btn-sm" 
+            (click)="rechazarTurno(turno)"
+          >
+            Rechazar
+          </button>
+
+          <!-- Aceptar Turno -->
+          <button 
+            *ngIf="turno.estado !== 'realizado' && turno.estado !== 'cancelado' && turno.estado !== 'rechazado' && turno.estado !== 'aceptado'" 
+            class="btn btn-success btn-sm" 
+            (click)="aceptarTurno(turno)"
+          >
+            Aceptar
+          </button>
+
+          <!-- Finalizar Turno -->
+          <button 
+            *ngIf="turno.estado === 'aceptado'" 
+            class="btn btn-primary btn-sm" 
+            (click)="finalizarTurno(turno)"
+          >
+            Finalizar
+          </button>
+
+          <!-- Ver Reseña -->
+          <button 
+            *ngIf="turno.comentarioResena" 
+            class="btn btn-info btn-sm" 
+            (click)="verResena(turno)"
+          >
+            Ver Reseña
+          </button>
+
+        <!-- Ver Diagnostico -->
+        <button 
+            *ngIf="turno.diagnostico" 
+            class="btn btn-info btn-sm" 
+            (click)="verDiagnostico(turno)"
+            >
+            Ver Diagnóstico
+        </button>
+
+
+        <!-- Ver Motivo -->
+        <button 
+            *ngIf="turno.comentarioCancelacion || turno.comentarioRechazo" 
+            class="btn btn-info btn-sm" 
+            (click)="verMotivo(turno)"
+            >
+            Ver Motivo
+        </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  

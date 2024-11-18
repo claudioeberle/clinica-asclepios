@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="titulo"><h2>Turnos</h2></div>
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Especialidad</th>
+            <th>Especialista</th>
+            <th>Paciente</th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let turno of turnos">
+            <td>{{ turno.especialidad }}</td>
+            <td>{{ turno.especialista?.nombre }} {{ turno.especialista?.apellido }}</td>
+            <td>{{ turno.paciente?.nombre }} {{ turno.paciente?.apellido }}</td>
+            <td>{{ turno.fecha }}</td>
+            <td>{{ turno.inicio }}</td>
+            <td>{{ turno.estado }}</td>
+            <td>
+              <!-- Cancelar Turno -->
+              <button 
+                *ngIf="turno.estado !== 'aceptado' && turno.estado !== 'realizado' && turno.estado !== 'rechazado' && turno.estado !== 'cancelado'" 
+                class="btn btn-danger btn-sm" 
+                (click)="cancelarTurno(turno)"
+              >
+                Cancelar
+              </button>
+      
+            <!-- Ver Motivo -->
+            <button 
+                *ngIf="turno.comentarioCancelacion" 
+                class="btn btn-info btn-sm" 
+                (click)="verMotivo(turno)"
+                >
+                Ver Motivo
+            </button>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+</div>
+
+  

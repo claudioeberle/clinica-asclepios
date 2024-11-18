@@ -12,6 +12,9 @@ import { RegistroAdminComponent } from './componentes/altas/registro-admin/regis
 import { sesionGuard } from './guards/sesion.guard';
 import { AltaTurnoComponent } from './componentes/turnos/alta-turno/alta-turno.component';
 import { PerfilComponent } from './componentes/perfil/perfil.component';
+import { MisTurnosPacienteComponent } from './componentes/turnos/mis-turnos-paciente/mis-turnos-paciente.component';
+import { MisTurnosEspecialistaComponent } from './componentes/turnos/mis-turnos-especialista/mis-turnos-especialista.component';
+import { TurnosComponent } from './componentes/turnos/turnos/turnos.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: "full" },
@@ -26,7 +29,10 @@ export const routes: Routes = [
     { path: 'usuarios', component: UsuariosComponent, canActivate: [sesionGuard]},
     { path: 'spinner', component: SpinnerComponent },
     { path: 'contacto', component: ContactoComponent },
-    { path: 'turno-alta', component: AltaTurnoComponent, canActivate: [sesionGuard]},
+    { path: 'turnos-alta', component: AltaTurnoComponent, canActivate: [sesionGuard]},
+    { path: 'turnos-misturnos-paciente', component: MisTurnosPacienteComponent, canActivate: [sesionGuard]},
+    { path: 'turnos-misturnos-especialista', component: MisTurnosEspecialistaComponent, canActivate: [sesionGuard]},
+    { path: 'turnos', component: TurnosComponent, canActivate: [sesionGuard]},
     { path: 'perfil', component: PerfilComponent, canActivate: [sesionGuard]}
 
 ];

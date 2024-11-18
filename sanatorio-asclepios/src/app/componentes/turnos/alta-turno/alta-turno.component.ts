@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { usuario } from '../../../interfaces/usuario';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -8,43 +8,53 @@ import { Disponibilidad } from '../../../interfaces/disponibilidad';
 import { AuthService } from '../../../services/auth.service';
 import { TurnosService } from '../../../services/turnos.service';
 import { SpinnerService } from '../../../services/spinner.service';
+import { EspecialidadesService } from '../../../services/especialidades.service';
+import { collection, query, where, getDocs, Firestore } from '@angular/fire/firestore';
+import { TurnoHoraPipe } from '../../../pipes/turno-hora.pipe';
 
 
 @Component({
   selector: 'app-alta-turno',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TurnoHoraPipe],
   templateUrl: './alta-turno.component.html',
   styleUrl: './alta-turno.component.scss'
 })
-export class AltaTurnoComponent {
+export class AltaTurnoComponent implements OnInit{
   solicitante: usuario | null = null;
   paciente: usuario | null = null;
   pacientes: usuario[] = [];
+
   especialistas: usuario[] = [];
   especialistaSeleccionado: usuario | null = null;
+
   especialidades: string[] = [];
   especialidadSeleccionada: string | null = null;
+
   disponibilidadSeleccionada: Disponibilidad | undefined;
   diasDisponibles: string[] = [];
   fechaSeleccionada: string | null = null;
-  turnosDisponibles = ['08:00', '08:30', '09:00'];
-  pasoActual = 1;
+  turnosDisponibles: string[] = [];
   turnoSeleccionado: string | null = null;
   turnoCreado = false;
 
+  pasoActual = 1;
+
+
   constructor(
     private especialistasService: EspecialistasService,
+    private especialidadesService: EspecialidadesService,
     private disponibilidadService: DisponibilidadService,
     private auth:AuthService,
     private turnosServ:TurnosService,
-    private spinnerService:SpinnerService
+    private spinnerService:SpinnerService,
+    private firestore:Firestore
   ) {}
 
   ngOnInit() {
     this.solicitante = this.auth.getCurrentUser();
     this.definirPaciente();
-    this.obtenerEspecialistas();
+    this.obtenerEspecialidades();
   }
 
   definirPaciente(){
@@ -56,14 +66,20 @@ export class AltaTurnoComponent {
   }
 
   obtenerEspecialistas() {
-    this.especialistasService.GetAllEspecialistas().subscribe(
-      (especialistas) => {
+    if(this.especialidadSeleccionada){
+      this.especialistasService.GetEspecialistasByEspecialidad(this.especialidadSeleccionada).subscribe(especialistas => {
         this.especialistas = especialistas;
-      },
-      (error) => {
-        console.error('Error al obtener especialistas:', error);
-      }
-    );
+      });
+      console.log(this.especialistas);
+    }else{
+      console.log('error al intentar obtener los especialistas - especialidad no definida')
+    }
+  }
+
+  obtenerEspecialidades(): void {
+    this.especialidadesService.getEspecialidades().subscribe(especialidades => {
+      this.especialidades = especialidades.map((especialidad: any) => especialidad.nombre);
+    });
   }
 
   obtenerPacientes() {
@@ -108,7 +124,6 @@ export class AltaTurnoComponent {
       .map((esp) => esp.trim());
   }
 
-
   calcularDiasDisponibles() {
     if (!this.disponibilidadSeleccionada) return;
 
@@ -136,6 +151,7 @@ export class AltaTurnoComponent {
 
   seleccionarEspecialidad(especialidad: string) {
     this.especialidadSeleccionada = especialidad;
+    this.obtenerEspecialistas();
     console.log('Especialidad seleccionada:', this.especialidadSeleccionada);
   }
 
@@ -161,16 +177,16 @@ export class AltaTurnoComponent {
   }
 
   generarTurnos(fechaSeleccionada: string) {
-
     if (!this.disponibilidadSeleccionada) return;
-
+  
     const diasDeLaSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
     const fecha = new Date(fechaSeleccionada.split('/').reverse().join('-'));
     const diaDeLaSemana = diasDeLaSemana[fecha.getDay()];
+  
     console.log('Fecha convertida:', fecha);
     console.log('Día seleccionado:', diaDeLaSemana);
     console.log('Disponibilidad seleccionada:', this.disponibilidadSeleccionada.disponibilidad);
-
+  
     const disponibilidadDelDia = this.disponibilidadSeleccionada.disponibilidad.find(
       (dispo) => dispo.dia === diaDeLaSemana
     );
@@ -198,8 +214,20 @@ export class AltaTurnoComponent {
         horaActual++;
       }
     }
-    this.turnosDisponibles = turnos;
-    console.log('Turnos disponibles:', this.turnosDisponibles);
+  
+    this.turnosServ.verificarTurnosNoOcupados(fechaSeleccionada, turnos).then((turnosLibres) => {
+      if(turnosLibres.length == 0){
+        Swal.fire({
+          title: "¡No hay turnos para el "+this.fechaSeleccionada+". Pruebe con otra fecha!",
+          icon: "error"
+        });
+        this.quitarFecha(this.fechaSeleccionada);
+        this.fechaSeleccionada = null;
+      }else{
+        this.turnosDisponibles = turnosLibres;
+        console.log('Turnos disponibles:', this.turnosDisponibles);
+      }
+    });
   }
 
   seleccionarTurno(turno:string){
@@ -208,13 +236,21 @@ export class AltaTurnoComponent {
 
   confirmarTurno(){
     const nuevoTurno = {
+      id:null,
       inicio : this.turnoSeleccionado,
       fecha: this.fechaSeleccionada,
       ano:'2024',
       paciente:this.paciente,
       especialista:this.especialistaSeleccionado,
       especialidad:this.especialidadSeleccionada,
-      otorgado:true
+      otorgado:true,
+      estado:'pendiente',
+      comentarioCancelacion:'',
+      comentarioResena:'',
+      diagnostico:'',
+      comentarioRechazo:'',
+      encuestaCompleta:false,
+      calificacionAtencion:null
     }
 
     this.turnosServ.guardarTurno(nuevoTurno);
@@ -229,7 +265,7 @@ export class AltaTurnoComponent {
 
   reiniciarProceso(){
     this.definirPaciente();
-    this.obtenerEspecialistas();
+    this.obtenerEspecialidades();
     this.pasoActual = 1;
     this.especialistaSeleccionado = null;
     this.especialidadSeleccionada = null;
@@ -245,6 +281,15 @@ export class AltaTurnoComponent {
       this.turnoCreado = false;
       this.reiniciarProceso();
     }, 2000);
+  }
+
+  quitarFecha(fecha: string | null) {
+    if(fecha){
+      const index = this.diasDisponibles.indexOf(fecha);
+      if (index > -1) {
+        this.diasDisponibles.splice(index, 1);
+      }
+    }
   }
 
 }

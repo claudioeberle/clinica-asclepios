@@ -30,4 +30,12 @@ export class ConsolaComponent {
   goTo(componente:string){
     this.router.navigateByUrl(componente);
   }
+
+  goToMisTurnos(){
+    if(this.auth.esUsuarioEspecialista()){
+      this.router.navigateByUrl('turnos-misturnos-especialista');
+    }else{
+      this.router.navigateByUrl('turnos-misturnos-paciente');
+    }
+  }
 }
