@@ -40,16 +40,6 @@ Tipos de usuario de acceso:
 ![image](https://github.com/user-attachments/assets/f065fee0-fb71-4fa8-953f-860411d0d3a2)
 
 
-<h3>Servicios para el Especialista</h3>
-
-![image](https://github.com/user-attachments/assets/96898c56-8dab-47e1-8677-5ea35036d51b)
-
-
-<h3>Servicios para el Paciente</h3>
-
-![image](https://github.com/user-attachments/assets/eba7058c-e874-452b-8464-948f63a33125)
-
-
 <h2>Servicios para el Administrador</h2>
 
 <h3>Gestión de Usuarios</h3>
@@ -65,6 +55,47 @@ Tipos de usuario de acceso:
 <h4>Listado de Administradores</h4>
 
 ![image](https://github.com/user-attachments/assets/79b92ade-e8b8-4c32-92d8-49ccd2f22f84)
+
+
+<h3>Alta de Usuarios</h3>
+
+![image](https://github.com/user-attachments/assets/619be855-8b22-4157-b68d-0d2a64e2f385)
+
+<h3>Mi Perfil</h3>
+
+![image](https://github.com/user-attachments/assets/29631911-0847-498d-9237-4f0bfc898813)
+
+<h3>Pedir Turno</h3>
+<h4>El administrador podrá cargar turnos para terceros</h4>
+<h4>(Desarrollado luego...)</h4>
+
+<h3>Gestión de Turnos</h3>
+
+![image](https://github.com/user-attachments/assets/97d9fe54-2297-4e6e-b01b-1bc5062d59d4)
+
+
+
+<h3>Servicios para el Especialista</h3>
+
+![image](https://github.com/user-attachments/assets/96898c56-8dab-47e1-8677-5ea35036d51b)
+
+<h3>Mi Perfil</h3>
+
+![image](https://github.com/user-attachments/assets/8b6d9c6c-1bc2-46e2-be2f-fb0b153623b9)
+
+<h3>Mis Turnos</h3>
+
+![image](https://github.com/user-attachments/assets/7a8b563e-a22c-433d-829e-882dce7e0f3e)
+
+
+
+
+<h3>Servicios para el Paciente</h3>
+
+![image](https://github.com/user-attachments/assets/eba7058c-e874-452b-8464-948f63a33125)
+
+
+
 
 
 
