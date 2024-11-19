@@ -73,7 +73,6 @@ export class UsuariosComponent implements OnInit{
 
   async exportarExcel(tipo: string): Promise<void> {
     this.usuarios$.subscribe((usuarios) => {
-      // Filtrar usuarios según el tipo seleccionado
       const usuariosFiltrados = usuarios.filter((usr) => {
         if (tipo === 'Paciente') return usr.esPaciente;
         if (tipo === 'Especialista') return usr.esEspecialista;
@@ -81,7 +80,6 @@ export class UsuariosComponent implements OnInit{
         return false;
       });
 
-      // Crear datos para la tabla
       const datosExcel = usuariosFiltrados.map((usr) => ({
         Nombre: usr.nombre,
         Apellido: usr.apellido,
@@ -97,12 +95,10 @@ export class UsuariosComponent implements OnInit{
         Email: usr.email,
       }));
 
-      // Crear libro de Excel
       const hoja = XLSX.utils.json_to_sheet(datosExcel);
       const libro = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(libro, hoja, 'Usuarios');
 
-      // Descargar archivo
       const nombreArchivo = `Usuarios_${tipo}.xlsx`;
       XLSX.writeFile(libro, nombreArchivo);
     });

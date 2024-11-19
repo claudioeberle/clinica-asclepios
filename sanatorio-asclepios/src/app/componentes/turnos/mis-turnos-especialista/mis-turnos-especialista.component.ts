@@ -4,7 +4,12 @@ import { Turno } from '../../../interfaces/turno';
 import { usuario } from '../../../interfaces/usuario';
 import { AuthService } from '../../../services/auth.service';
 import { TurnosService } from '../../../services/turnos.service';
+import { HistoriaClinicaService } from '../../../services/historia-clinica.service';
 import Swal from 'sweetalert2';
+import { historiaClinica } from '../../../interfaces/historiaClinica';
+import { MatDialog } from '@angular/material/dialog';
+import { HistoriaClinicaComponent } from '../../historia-clinica/historia-clinica.component';
+
 
 @Component({
   selector: 'app-mis-turnos-especialista',
@@ -20,7 +25,9 @@ export class MisTurnosEspecialistaComponent {
 
   constructor(
     private turnosService: TurnosService,
-    private auth: AuthService
+    private auth: AuthService,
+    private historiaClinicaService:HistoriaClinicaService,
+    private dialog:MatDialog
   ) {
     this.usuarioLogueado = this.auth.getCurrentUser();
     this.cargarTurnos();
@@ -122,13 +129,37 @@ export class MisTurnosEspecialistaComponent {
     });
   
     if (formValues) {
-      turno.estado = 'realizado';
-      turno.comentarioResena = formValues.comentario;
-      turno.diagnostico = formValues.diagnostico;
+      const dialogRef = this.dialog.open(HistoriaClinicaComponent, {
+        data: { turno },
+        disableClose: true
+      });
   
-      await this.turnosService.actualizarTurno(turno);
-      await Swal.fire('¡Éxito!', 'El turno ha sido finalizado con éxito.', 'success');
-      this.cargarTurnos();
+      dialogRef.afterClosed().subscribe(async (historiaClinicaData) => {
+        if (historiaClinicaData) {
+          try {
+            turno.estado = 'realizado';
+            turno.comentarioResena = formValues.comentario;
+            turno.diagnostico = formValues.diagnostico;
+  
+            await this.turnosService.actualizarTurno(turno);
+  
+            const nuevaHistoria: historiaClinica = {
+              fecha_atencion: new Date(),
+              especialista: this.usuarioLogueado!,
+              paciente: turno.paciente!,
+              turno: turno,
+              ...historiaClinicaData
+            };
+  
+            await this.historiaClinicaService.guardarHistoriaClinica(nuevaHistoria);
+            await Swal.fire('¡Éxito!', 'El turno ha sido finalizado y la historia clínica guardada.', 'success');
+            this.cargarTurnos();
+          } catch (error) {
+            console.error('Error al finalizar el turno:', error);
+            await Swal.fire('Error', 'No se pudo finalizar el turno. Intente nuevamente.', 'error');
+          }
+        }
+      });
     }
   }
   

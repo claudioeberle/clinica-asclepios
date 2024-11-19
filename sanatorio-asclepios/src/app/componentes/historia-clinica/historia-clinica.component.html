@@ -1,0 +1,36 @@
+<p>historia-clinica works!</p>
+<div class="container">
+    <h2>Historia Clínica</h2>
+    <form [formGroup]="historiaForm">
+        <div>
+        <label>Altura (cm):</label>
+        <input type="number" formControlName="altura" />
+        </div>
+        <div>
+        <label>Peso (kg):</label>
+        <input type="number" formControlName="peso" />
+        </div>
+        <div>
+        <label>Temperatura (°C):</label>
+        <input type="number" formControlName="temperatura" />
+        </div>
+        <div>
+        <label>Presión (mmHg):</label>
+        <input type="text" formControlName="presion" placeholder="120/80" />
+        </div>
+
+        <h3>Datos Dinámicos</h3>
+        <div formArrayName="datosDinamicos" *ngFor="let dato of datosDinamicos.controls; let i = index">
+        <div [formGroupName]="i">
+            <input type="text" placeholder="Clave" formControlName="clave" />
+            <input type="text" placeholder="Valor" formControlName="valor" />
+            <button type="button" (click)="eliminarDatoDinamico(i)">Eliminar</button>
+        </div>
+        </div>
+        <button type="button" (click)="agregarDatoDinamico()">Agregar Dato</button>
+
+        <button type="button" (click)="guardar()" [disabled]="historiaForm.invalid">Guardar</button>
+    </form>
+</div>
+
+  
