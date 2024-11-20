@@ -18,11 +18,14 @@
   margin: 0;
   box-sizing: border-box;
   overflow-x: auto;
+  max-width: 100%;
 }
 
 .select-especialista-p {
   display: flex;
   flex-wrap: nowrap;
+  gap: 10px;
+  padding: 5px 0;
 }
 
 .card-especialidad {
@@ -96,6 +99,8 @@
 
   .container{
     margin-left: 0;
+    padding-left: 10vw;
+    padding-bottom: 25px;
   }
 
   h2{

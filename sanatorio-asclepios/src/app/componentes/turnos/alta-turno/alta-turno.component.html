@@ -22,7 +22,7 @@
   </div>
 
   <!--especialidad-->
-  <div *ngIf="paciente && !especialidadSeleccionada" class="block-especialista">
+  <div *ngIf="paciente && !especialidadSeleccionada" class="block-especialista-p">
     <h2>Seleccionar Especialidad</h2>
     <div class="select-especialidad">
       <div *ngFor="let especialidad of especialidades" class="card-especialidad" (click)="seleccionarEspecialidad(especialidad)">
@@ -42,7 +42,7 @@
   </div>
 
   <!--especialista-->
-  <div class="block-especialista" *ngIf="!especialistaSeleccionado && especialidadSeleccionada">
+  <div class="block-especialista-p" *ngIf="!especialistaSeleccionado && especialidadSeleccionada">
     <h2>Seleccionar Especialista</h2>
     <div class="select-especialista" *ngIf="pasoActual === 1">
       <div *ngFor="let especialista of especialistas" class="card">
@@ -64,9 +64,9 @@
 
 
     <!--fecha-->
-  <div *ngIf="especialistaSeleccionado && !fechaSeleccionada" class="block-especialista">
+  <div *ngIf="especialistaSeleccionado && !fechaSeleccionada" class="block-especialista-p">
     <h2>Seleccionar Día</h2>
-    <div *ngFor="let dia of diasDisponibles">
+    <div *ngFor="let dia of diasDisponibles" class="select-especialista-p">
       <button class="btn btn-primary" (click)="seleccionarDia(dia)"><h3 >{{ dia }}</h3></button>
     </div>
   </div>
@@ -76,9 +76,9 @@
   </div>
 
     <!--turno-->
-  <div *ngIf="fechaSeleccionada && !turnoSeleccionado" class="block-especialista">
+  <div *ngIf="fechaSeleccionada && !turnoSeleccionado" class="block-especialista-p">
     <h2>Turnos disponibles el {{ fechaSeleccionada }}</h2>
-    <div class="select-turnos">
+    <div class="select-especialista">
       <button 
         *ngFor="let turno of turnosDisponibles" 
         class="btn btn-primary" 

@@ -17,11 +17,11 @@ export class HistoriaClinicaComponent {
 
   constructor(private fb: FormBuilder) {
     this.historiaForm = this.fb.group({
-      altura: [null, [Validators.required, Validators.min(50), Validators.max(250)]], // cms
-      peso: [null, [Validators.required, Validators.min(2), Validators.max(300)]], // kgs
-      temperatura: [null, [Validators.required, Validators.min(30), Validators.max(45)]], // ºC
-      presion: [null, [Validators.required]], // mmHg
-      datosDinamicos: this.fb.array([]) // Clave-valor dinámico
+      altura: [null, [Validators.required, Validators.min(50), Validators.max(250)]],
+      peso: [null, [Validators.required, Validators.min(2), Validators.max(300)]],
+      temperatura: [null, [Validators.required, Validators.min(30), Validators.max(45)]],
+      presion: [null, [Validators.required]],
+      datosDinamicos: this.fb.array([])
     });
   }
 

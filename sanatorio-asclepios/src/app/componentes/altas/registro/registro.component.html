@@ -9,12 +9,13 @@
             <img src="../../../../assets/iconos/admin.svg" alt="admin-icon">ADMINISTRADOR</button>
     </div>
 </div>
-<div class="forms-container">   
+<div class="forms-container" *ngIf="tipoRegistro">   
     <div *ngIf="tipoRegistro === 'paciente'">
         <app-registro-paciente></app-registro-paciente>
     </div>
     <div *ngIf="tipoRegistro === 'especialista'">
         <app-registro-especialistas></app-registro-especialistas>
+        
     </div>
     <div *ngIf="tipoRegistro === 'administrador'">
         <app-registro-admin></app-registro-admin>
