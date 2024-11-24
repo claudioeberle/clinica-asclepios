@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Turno } from '../interfaces/turno';
-import { addDoc, collection, doc, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, Firestore, getDocs, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
+import { historiaClinica } from '../interfaces/historiaClinica';
 
 @Injectable({
   providedIn: 'root'
@@ -108,6 +109,29 @@ export class TurnosService {
       console.error('Error al actualizar el turno:', error);
     }
   }
+
+  async getHistoriaClinicaCompleta(email: string): Promise<historiaClinica[]> {
+
+    const turnos: Turno[] = await this.getTurnosPorPaciente(email);
+    const historiasClinicas: historiaClinica[] = turnos
+      .filter(turno => turno.historiaClinica !== null)
+      .map(turno => turno.historiaClinica as historiaClinica);
+    
+    historiasClinicas.forEach(historia => {
+      if (historia.fecha_atencion instanceof Timestamp) {
+        historia.fecha_atencion = historia.fecha_atencion.toDate();
+      }
+    });
+    
+    historiasClinicas.sort((a, b) => {
+      const fechaA = new Date(a.fecha_atencion).getTime();
+      const fechaB = new Date(b.fecha_atencion).getTime();
+      return fechaB - fechaA;
+    });
+  
+    return historiasClinicas;
+  }
+  
 
 
 

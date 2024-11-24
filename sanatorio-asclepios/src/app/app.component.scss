@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: lightgrey;
@@ -140,7 +140,7 @@ html, body {
 .body{
   background-color:grey;
   width: 100%;
-  height: 100%;
+  height: auto;
   margin-bottom: 35px;
 }
 

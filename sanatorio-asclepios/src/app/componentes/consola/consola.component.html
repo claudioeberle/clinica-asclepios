@@ -23,7 +23,7 @@
       <img src="../../../assets/iconos/usuario-2-icon.svg" alt="alta-usuario-icon" />
       <span>Mi perfil</span>
     </button>
-    <button *ngIf="esEspecialista" class="consola-button">
+    <button *ngIf="esEspecialista" class="consola-button" (click)="goTo('pacientes')">
       <img src="../../../assets/iconos/usuarios-icon.svg" alt="turnos-icon" />
       <span>Mis Pacientes</span>
     </button>

@@ -4,6 +4,7 @@ import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 import { usuario } from '../interfaces/usuario';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { LogsService } from './logs.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class AuthService{
   constructor(
     private auth:Auth, 
     private firestore:Firestore,
-    private router:Router
+    private router:Router,
+    private logSrv:LogsService
   ) {
 
     this.getAllUsers().subscribe(users => {
@@ -68,6 +70,7 @@ export class AuthService{
   }
 
   cerrarSesion(){
+    this.logSrv.guardarLog({fecha:new Date(),usuario:this.getCurrentUserEmail(),accion:'logout'});
     this.usuarioSubject.next(false);
     this.router.navigateByUrl('home');
     console.log('Sesión cerrada');

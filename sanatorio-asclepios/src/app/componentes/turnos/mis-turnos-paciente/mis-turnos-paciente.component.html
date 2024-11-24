@@ -1,5 +1,14 @@
 <div class="container">
   <div class="titulo"><h2>Mis Turnos</h2></div>
+  <div class="mb-3">
+    <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar por cualquier campo..."
+        [(ngModel)]="filtroBusqueda"
+        (input)="filtrarTurnos()"
+    />
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -12,12 +21,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let turno of turnos">
-        <td>{{ turno.especialidad }}</td>
-        <td>{{ turno.especialista?.nombre }} {{ turno.especialista?.apellido }}</td>
-        <td>{{ turno.fecha }}</td>
-        <td>{{ turno.inicio }}</td>
-        <td>{{ turno.estado }}</td>
+      <tr *ngFor="let turno of turnosFiltrados">
+        <td [innerHTML]="(turno.especialidad ?? '') | highlight: filtroBusqueda"></td>
+        <td [innerHTML]="((turno.especialista?.nombre ?? '') + ' ' + (turno.especialista?.apellido ?? '')) | highlight: filtroBusqueda"></td>
+        <td [innerHTML]="(turno.fecha ?? '') | highlight: filtroBusqueda"></td>
+        <td [innerHTML]="(turno.inicio ?? '') | highlight: filtroBusqueda"></td>
+        <td [innerHTML]="(turno.estado) | highlight: filtroBusqueda"></td>
         <td>
           <!-- Cancelar Turno -->
           <button 

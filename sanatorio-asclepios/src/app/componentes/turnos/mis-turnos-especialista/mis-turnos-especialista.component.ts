@@ -9,18 +9,22 @@ import Swal from 'sweetalert2';
 import { historiaClinica } from '../../../interfaces/historiaClinica';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoriaClinicaComponent } from '../../historia-clinica/historia-clinica.component';
+import { FormsModule } from '@angular/forms';
+import { HighlightPipe } from '../../../pipes/highlight.pipe';
 
 
 @Component({
   selector: 'app-mis-turnos-especialista',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, HighlightPipe],
   templateUrl: './mis-turnos-especialista.component.html',
   styleUrl: './mis-turnos-especialista.component.scss'
 })
 export class MisTurnosEspecialistaComponent {
 
   turnos: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
+  filtroBusqueda: string = '';
   usuarioLogueado: usuario | null = null; 
 
   constructor(
@@ -29,6 +33,7 @@ export class MisTurnosEspecialistaComponent {
     private historiaClinicaService:HistoriaClinicaService,
     private dialog:MatDialog
   ) {
+    
     this.usuarioLogueado = this.auth.getCurrentUser();
     this.cargarTurnos();
   }
@@ -36,6 +41,7 @@ export class MisTurnosEspecialistaComponent {
   async cargarTurnos(): Promise<void> {
     try {
       this.turnos = await this.turnosService.getTurnosPorEspecialista(this.auth.getCurrentUserEmail());
+      this.turnosFiltrados = [...this.turnos];
     } catch (error) {
       console.error('Error al cargar turnos:', error);
     }
@@ -123,47 +129,20 @@ export class MisTurnosEspecialistaComponent {
           Swal.showValidationMessage('Ambos campos son obligatorios');
           return null;
         }
-  
         return { comentario, diagnostico };
       }
     });
   
     if (formValues) {
-      const dialogRef = this.dialog.open(HistoriaClinicaComponent, {
-        data: { turno },
-        disableClose: true
-      });
-  
-      dialogRef.afterClosed().subscribe(async (historiaClinicaData) => {
-        if (historiaClinicaData) {
-          try {
-            turno.estado = 'realizado';
-            turno.comentarioResena = formValues.comentario;
-            turno.diagnostico = formValues.diagnostico;
-  
-            await this.turnosService.actualizarTurno(turno);
-  
-            const nuevaHistoria: historiaClinica = {
-              fecha_atencion: new Date(),
-              especialista: this.usuarioLogueado!,
-              paciente: turno.paciente!,
-              turno: turno,
-              ...historiaClinicaData
-            };
-  
-            await this.historiaClinicaService.guardarHistoriaClinica(nuevaHistoria);
-            await Swal.fire('¡Éxito!', 'El turno ha sido finalizado y la historia clínica guardada.', 'success');
-            this.cargarTurnos();
-          } catch (error) {
-            console.error('Error al finalizar el turno:', error);
-            await Swal.fire('Error', 'No se pudo finalizar el turno. Intente nuevamente.', 'error');
-          }
-        }
-      });
+      turno.estado = 'realizado';
+      turno.comentarioResena = formValues.comentario;
+      turno.diagnostico = formValues.diagnostico;
+      await this.turnosService.actualizarTurno(turno);
+      await Swal.fire('¡Éxito!', 'Turno finalizado con éxito.', 'success');
+
     }
   }
   
-
   verResena(turno: Turno): void {
     Swal.fire({
       title: 'Reseña del Turno',
@@ -202,4 +181,140 @@ export class MisTurnosEspecialistaComponent {
         break;
     }
   }
+
+  cargarHistoriaClinica(turno: Turno): void {
+    const dialogRef = this.dialog.open(HistoriaClinicaComponent, {
+      data: { turno },
+      disableClose: true,
+    });
+  
+    dialogRef.afterClosed().subscribe(async (historiaClinicaData) => {
+      if (historiaClinicaData) {
+        try {
+          console.log(historiaClinicaData);
+          turno.historiaClinica = historiaClinicaData;
+          await this.turnosService.actualizarTurno(turno);
+          await Swal.fire('¡Éxito!', 'La historia clínica ha sido cargada.', 'success');
+          this.cargarTurnos();
+        } catch (error) {
+          console.error('Error al guardar la historia clínica:', error);
+          await Swal.fire('Error', 'No se pudo guardar la historia clínica. Intente nuevamente.', 'error');
+        }
+      }else{
+        console.log('Proceso de carga de historia clínica cancelado.')
+      }
+    });
+  }
+
+  verHistoriaClinica(turno: Turno): void {
+    if (!turno.historiaClinica) {
+      Swal.fire({
+        title: 'Historia Clínica',
+        text: 'No hay información registrada para este turno.',
+        icon: 'warning',
+        confirmButtonText: 'Cerrar',
+      });
+      return;
+    }
+    
+      const historiaClinica = turno.historiaClinica.historiaClinica;
+  
+      let htmlContent = `
+        <ul style="text-align: left; list-style: none; padding: 0;">
+          <li><strong>Altura:</strong> ${historiaClinica.altura} cm</li>
+          <li><strong>Peso:</strong> ${historiaClinica.peso} kg</li>
+          <li><strong>Temperatura:</strong> ${historiaClinica.temperatura} °C</li>
+          <li><strong>Presión:</strong> ${historiaClinica.presion}</li>
+        </ul>
+      `;
+    
+      if (historiaClinica.datosDinamicos && historiaClinica.datosDinamicos.length > 0) {
+        htmlContent += `<h4>Datos adicionales:</h4><ul style="text-align: left; list-style: none; padding: 0;">`;
+    
+        historiaClinica.datosDinamicos.forEach((dato: { clave: string; valor: string }) => {
+          htmlContent += `<li><strong>${dato.clave}:</strong> ${dato.valor}</li>`;
+        });
+    
+        htmlContent += `</ul>`;
+      }
+      Swal.fire({
+        title: 'Historia Clínica',
+        html: htmlContent,
+        icon: 'info',
+        confirmButtonText: 'Cerrar',
+      });
+  }
+
+  filtrarTurnos(): void {
+    const filtro = this.filtroBusqueda.toLowerCase();
+
+    this.turnosFiltrados = this.turnos.filter(turno => {
+      // Datos del turno
+      const datosTurno = [
+        turno.especialidad,
+        turno.estado,
+        turno.fecha,
+        turno.inicio,
+        turno.diagnostico,
+        turno.comentarioCancelacion,
+        turno.comentarioResena,
+      ];
+
+      // Datos del paciente
+      const datosPaciente = turno.paciente
+        ? [
+            turno.paciente.nombre,
+            turno.paciente.apellido,
+            turno.paciente.email,
+            turno.paciente.dni?.toString(),
+            turno.paciente.obra_social,
+          ]
+        : [];
+
+      // Datos del especialista
+      const datosEspecialista = turno.especialista
+        ? [
+            turno.especialista.nombre,
+            turno.especialista.apellido,
+            turno.especialista.email,
+            turno.especialista.dni?.toString(),
+          ]
+        : [];
+
+      // Datos de la historia clínica
+      const datosHistoriaClinica = turno.historiaClinica?.historiaClinica
+        ? [
+            turno.historiaClinica.historiaClinica.altura,
+            turno.historiaClinica.historiaClinica.peso,
+            turno.historiaClinica.historiaClinica.temperatura,
+            turno.historiaClinica.historiaClinica.presion,
+            turno.historiaClinica.diagnostico,
+            ...turno.historiaClinica.historiaClinica.datosDinamicos?.map(
+              dato => `${dato.clave}: ${dato.valor}`
+            ) || [],
+          ]
+        : [];
+
+      // Unir todos los datos y buscar el filtro
+      const todosLosDatos = [
+        ...datosTurno,
+        ...datosPaciente,
+        ...datosEspecialista,
+        ...datosHistoriaClinica,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return todosLosDatos.includes(filtro);
+    });
+  }
+
+
+
+
+
+
+
+
 }

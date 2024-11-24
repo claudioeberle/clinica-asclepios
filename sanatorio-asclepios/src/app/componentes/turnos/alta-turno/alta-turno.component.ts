@@ -250,7 +250,8 @@ export class AltaTurnoComponent implements OnInit{
       diagnostico:'',
       comentarioRechazo:'',
       encuestaCompleta:false,
-      calificacionAtencion:null
+      calificacionAtencion:null,
+      historiaClinica:null
     }
 
     this.turnosServ.guardarTurno(nuevoTurno);

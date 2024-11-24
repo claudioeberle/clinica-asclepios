@@ -1,0 +1,34 @@
+<div class="titulo"><h2>Mis Pacientes</h2></div>
+<div class="cards-container" >
+    <div *ngFor="let usr of pacientes" class="card">
+      <div class="card-image">
+        <img
+          [src]="fotoActual[usr.id] ? (usr | fotoUsuario:2) : (usr | fotoUsuario:1)"
+          alt="Foto de {{ usr.nombre }} {{ usr.apellido }}"
+          class="img-thumbnail"
+          style="width: 100%; height: 200px; object-fit: cover;"
+          (click)="toggleFoto(usr.id)"
+        />
+
+        <img
+          [src]="usr | fotoUsuario"
+          alt="Foto de {{ usr.nombre }} {{ usr.apellido }}"
+          class="img-thumbnail"
+          style="width: 100%; height: 200px; object-fit: cover;"
+        />
+      </div>
+      <div class="card-body">
+        <h2>{{ usr.nombre }} {{ usr.apellido }}</h2>
+        <p *ngIf="usr.edad">Edad: {{ usr.edad }}</p>
+        <p *ngIf="usr.dni">DNI: {{ usr.dni }}</p>
+        <p>Obra Social: {{ usr.obra_social }}</p>
+        <p>Email: {{ usr.email }}</p>
+        <h3>Últimos Turnos:</h3>
+      <ul>
+        <li class="turno-detalle" *ngFor="let turno of getUltimosTresTurnos(usr.email)" (click)="verHistoriaClinica(turno)">
+          Turno {{ turno.fecha }} - {{ turno.inicio }} -{{ turno.especialidad }}
+        </li>
+      </ul>
+      </div>
+    </div>
+</div>

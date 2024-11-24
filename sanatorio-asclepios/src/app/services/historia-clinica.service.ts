@@ -9,13 +9,6 @@ export class HistoriaClinicaService {
 
   constructor(private firestore:Firestore) { }
 
-  async guardarHistoriaClinica(historia: historiaClinica): Promise<void> {
-    try {
-      const historiaClinicaCollection = collection(this.firestore, 'historias-clinicas');
-      await addDoc(historiaClinicaCollection, historia);
-    } catch (error) {
-      console.error('Error al guardar la historia clínica:', error);
-      throw error;
-    }
-  }
+
+
 }

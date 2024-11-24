@@ -5,17 +5,21 @@ import { usuario } from '../../../interfaces/usuario';
 import { AuthService } from '../../../services/auth.service';
 import { TurnosService } from '../../../services/turnos.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HighlightPipe } from '../../../pipes/highlight.pipe';
 
 @Component({
   selector: 'app-turnos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, HighlightPipe],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.scss'
 })
 export class TurnosComponent {
 
   turnos: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
+  filtroBusqueda: string = '';
   usuarioLogueado: usuario | null = null; 
 
   constructor(
@@ -29,9 +33,71 @@ export class TurnosComponent {
   async cargarTurnos(): Promise<void> {
     try {
       this.turnos = await this.turnosService.getTurnos();
+      this.turnosFiltrados = [...this.turnos];
     } catch (error) {
       console.error('Error al cargar turnos:', error);
     }
+  }
+
+  filtrarTurnos(): void {
+    const filtro = this.filtroBusqueda.toLowerCase();
+
+    this.turnosFiltrados = this.turnos.filter(turno => {
+      // Datos del turno
+      const datosTurno = [
+        turno.especialidad,
+        turno.estado,
+        turno.fecha,
+        turno.inicio,
+        turno.diagnostico,
+        turno.comentarioCancelacion,
+        turno.comentarioResena,
+      ];
+
+      // Datos del paciente
+      const datosPaciente = turno.paciente
+        ? [
+            turno.paciente.nombre,
+            turno.paciente.apellido,
+            turno.paciente.email,
+            turno.paciente.dni?.toString(),
+            turno.paciente.obra_social,
+          ]
+        : [];
+
+      // Datos del especialista
+      const datosEspecialista = turno.especialista
+        ? [
+            turno.especialista.nombre,
+            turno.especialista.apellido,
+            turno.especialista.email,
+            turno.especialista.dni?.toString(),
+          ]
+        : [];
+
+      // Datos de la historia clínica
+      const datosHistoriaClinica = turno.historiaClinica
+        ? [
+            turno.historiaClinica.diagnostico,
+            ...turno.historiaClinica.historiaClinica.datosDinamicos?.map(
+              dato => `${dato.clave}: ${dato.valor}`
+            ) || [],
+          ]
+        : [];
+
+      // Unir todos los datos y buscar el filtro
+      const todosLosDatos = [
+        ...datosTurno,
+        ...datosPaciente,
+        ...datosEspecialista,
+        ...datosHistoriaClinica,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return todosLosDatos.includes(filtro);
+    });
   }
 
   async cancelarTurno(turno: Turno): Promise<void> {

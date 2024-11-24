@@ -1,6 +1,121 @@
-.container{
-    background-color: grey;
-    width: 100vw;
-    height: 100vh;
-    padding: 20px;
+.container {
+  max-width: 75vw;
+  width: 75vw;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  max-height: 100vh;}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  max-width: 120px;
+  margin: 0 auto 10px;
+}
+
+.turno-info,
+.resumen {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+hr {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+h2,
+h3 {
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dato-dinamico {
+  display: flex;
+  flex-wrap: wrap; /* Asegura que los campos se ajusten en pantallas pequeñas */
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="button"] {
+  background-color: #007bff;
+  color: #fff;
+  margin-right: 10px;
+}
+
+button[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.botones {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.botones button {
+  margin: 0 10px;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header {
+    margin-bottom: 15px;
+  }
+
+  .logo {
+    max-width: 80px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 8px 15px;
+  }
+
+  .dato-dinamico {
+    flex-direction: column; /* Acomoda los campos uno debajo del otro */
+  }
 }

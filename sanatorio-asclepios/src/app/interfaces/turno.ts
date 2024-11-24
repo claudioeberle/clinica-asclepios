@@ -1,3 +1,4 @@
+import { historiaClinica } from "./historiaClinica";
 import { usuario } from "./usuario";
 
 export interface Turno {
@@ -19,4 +20,5 @@ export interface Turno {
       comentario: string;
       puntuacion: number;
     } | null;
+    historiaClinica: historiaClinica | null;
   }

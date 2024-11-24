@@ -13,7 +13,8 @@ td button{
 
 .container{
   background-color: white;
-  height: 100vh;
+  height: 100%;
+  padding-bottom: 35px;
 }
 
 .titulo {
@@ -28,4 +29,9 @@ td button{
 .titulo h2 {
   font-size: xx-large;
   color: white;
+}
+
+.highlight {
+  color: red;
+  font-weight: bold;
 }

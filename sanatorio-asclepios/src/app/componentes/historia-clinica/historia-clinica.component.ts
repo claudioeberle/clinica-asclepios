@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Turno } from '../../interfaces/turno';
 
 @Component({
   selector: 'app-historia-clinica',
@@ -10,14 +12,17 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } fr
   styleUrls: ['./historia-clinica.component.scss']
 })
 export class HistoriaClinicaComponent {
-  @Input() turno: any;
-  @Output() historiaGuardada = new EventEmitter<any>();
-
   historiaForm: FormGroup;
+  turno:Turno;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<HistoriaClinicaComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { turno: Turno }
+  ) {
+    this.turno = data.turno;
     this.historiaForm = this.fb.group({
-      altura: [null, [Validators.required, Validators.min(50), Validators.max(250)]],
+      altura: [null, [Validators.required, Validators.min(30), Validators.max(250)]],
       peso: [null, [Validators.required, Validators.min(2), Validators.max(300)]],
       temperatura: [null, [Validators.required, Validators.min(30), Validators.max(45)]],
       presion: [null, [Validators.required]],
@@ -46,7 +51,21 @@ export class HistoriaClinicaComponent {
 
   guardar(): void {
     if (this.historiaForm.valid) {
-      this.historiaGuardada.emit(this.historiaForm.value);
+
+      const historia = {
+        fecha_atencion:new Date(),
+        paciente:`${this.turno.paciente?.nombre} ${this.turno.paciente?.apellido}`,
+        especialista:`${this.turno.especialista?.nombre} ${this.turno.especialista?.apellido}`,
+        especialidad: this.turno.especialidad,
+        diagnostico: this.turno.diagnostico,
+        historiaClinica : this.historiaForm.value
+      }
+      this.dialogRef.close(historia);
     }
   }
+
+  cancelar(): void{
+    this.dialogRef.close(null);
+  }
+
 }

@@ -5,17 +5,21 @@ import { usuario } from '../../../interfaces/usuario';
 import { TurnosService } from '../../../services/turnos.service';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HighlightPipe } from '../../../pipes/highlight.pipe';
 
 @Component({
   selector: 'app-mis-turnos-paciente',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, HighlightPipe],
   templateUrl: './mis-turnos-paciente.component.html',
   styleUrl: './mis-turnos-paciente.component.scss'
 })
 export class MisTurnosPacienteComponent {
   
   turnos: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
+  filtroBusqueda: string = '';
   usuarioLogueado: usuario | null = null; 
 
   constructor(
@@ -31,6 +35,7 @@ export class MisTurnosPacienteComponent {
   async cargarTurnos(): Promise<void> {
     try {
       this.turnos = await this.turnosService.getTurnosPorPaciente(this.auth.getCurrentUserEmail());
+      this.turnosFiltrados = [...this.turnos];
     } catch (error) {
       console.error('Error al cargar turnos:', error);
     }
@@ -136,4 +141,40 @@ export class MisTurnosPacienteComponent {
       await Swal.fire('Atención', 'La puntuación debe estar entre 1 y 5.', 'warning');
     }
   }
+
+  filtrarTurnos(): void {
+    const filtro = this.filtroBusqueda.toLowerCase();
+
+    this.turnosFiltrados = this.turnos.filter(turno => {
+      // Datos del turno
+      const datosTurno = [
+        turno.especialidad,
+        turno.estado,
+        turno.fecha,
+        turno.inicio,
+        turno.comentarioResena,
+      ];
+
+      // Datos del especialista
+      const datosEspecialista = turno.especialista
+        ? [
+            turno.especialista.nombre,
+            turno.especialista.apellido,
+          ]
+        : [];
+
+      // Unir todos los datos y buscar el filtro
+      const todosLosDatos = [
+        ...datosTurno,
+        ...datosEspecialista,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return todosLosDatos.includes(filtro);
+    });
+  }
+
+
 }

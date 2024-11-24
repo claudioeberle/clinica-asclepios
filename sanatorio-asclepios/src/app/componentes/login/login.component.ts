@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { LogsService } from '../../services/logs.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent {
 
   constructor(
     private router:Router,
-    private auth:AuthService
+    private auth:AuthService,
+    private logSrv:LogsService
   ) {}
 
   closeModal() {
@@ -37,7 +39,7 @@ export class LoginComponent {
 
   async IniciarSesion(){
     const usuario = this.auth.getUserbyEmail(this.correo);
-
+    console.log('metodo iniciar sesion');
     if(usuario){
       const res = await this.auth.Autenticar(this.correo, this.contrasena);
       this.auth.SetUsuario(null);
@@ -46,6 +48,7 @@ export class LoginComponent {
         || (usuario.esEspecialista && this.auth.EmailVerificado() && usuario.cuenta_valida)
         || (usuario.esAdmin && usuario.cuenta_valida)){
           this.auth.SetUsuario(usuario);
+          this.logSrv.guardarLog({fecha:new Date(),usuario:usuario.email,accion:'login'});
           console.log(res);
           this.closeModal();
           this.router.navigateByUrl('servicios');

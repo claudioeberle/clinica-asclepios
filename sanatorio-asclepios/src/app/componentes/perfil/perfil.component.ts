@@ -6,6 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { Disponibilidad } from '../../interfaces/disponibilidad';
 import { DisponibilidadService } from '../../services/disponibilidad.service';
 import Swal from 'sweetalert2';
+import { TurnosService } from '../../services/turnos.service';
+import { historiaClinica } from '../../interfaces/historiaClinica';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
+import { environment } from '../../../environment';
 
 @Component({
   selector: 'app-perfil',
@@ -30,7 +36,12 @@ export class PerfilComponent implements OnInit{
     sabado: { dia: 'sabado', desde: '', hasta: '' }
   };
 
-  constructor(private auth: AuthService, private dispoServ:DisponibilidadService, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private auth: AuthService, 
+    private dispoServ:DisponibilidadService, 
+    private cdRef: ChangeDetectorRef,
+    private turnosServ:TurnosService
+  ) {
     this.usuario = this.auth.getCurrentUser();
   }
 
@@ -80,31 +91,29 @@ export class PerfilComponent implements OnInit{
     return true;
   }
 
-  async actualizarHorarios(){
-    try{
-      this.disponibilidad = this.dispoServ.getDisponibilidadByEmail(this.usuario.email);
-      if (this.disponibilidad) {
-        const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
-    
-        dias.forEach((dia, index) => {
-          const disponibilidadDia = this.disponibilidad.disponibilidad[index];
-          if (disponibilidadDia) {
-            console.log(index);
-            console.log(disponibilidadDia.desde);
-            console.log(disponibilidadDia.hasta);
-            this.horario[dia].desde = disponibilidadDia.desde || '';
-            this.horario[dia].hasta = disponibilidadDia.hasta || '';
-          }
-        });
-        this.cdRef.detectChanges();
-      }else{
-        console.log('No cargo la disponibilidad');
+  actualizarHorarios() {
+    this.dispoServ.getDisponibilidadByEmail(this.usuario.email).subscribe({
+      next: (disponibilidad) => {
+        if (disponibilidad && disponibilidad.disponibilidad) {
+          const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+          
+          dias.forEach((dia, index) => {
+            const disponibilidadDia = disponibilidad.disponibilidad[index];
+            if (disponibilidadDia) {
+              this.horario[dia].desde = disponibilidadDia.desde || '';
+              this.horario[dia].hasta = disponibilidadDia.hasta || '';
+            }
+          });
+  
+          this.cdRef.detectChanges();
+        } else {
+          console.log('No se encontró disponibilidad para este especialista.');
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar la disponibilidad:', error);
       }
-    }catch(e){
-      console.log('hubo un error');
-      console.log(e);
-    }
-    
+    });
   }
 
   ActualizarDisponibilidad() {
@@ -163,6 +172,133 @@ export class PerfilComponent implements OnInit{
       this.prompt = '';
     }, 2000);
   }
+
+  async mostrarHistoriaClinica(): Promise<void> {
+    const historiasClinicas = await this.turnosServ.getHistoriaClinicaCompleta(this.usuario.email);
+  
+    if (!historiasClinicas.length) {
+      Swal.fire('Sin Historia Clínica', 'No hay atenciones registradas para este paciente.', 'info');
+      return;
+    }
+  
+    const historiaHtml = historiasClinicas
+      .map(historia => `
+        <div style="border: 1px solid #5f83b1; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+          <h4 style="color: #5f83b1;">Atención</h4>
+          <p><strong>Fecha de Atención:</strong> ${new Date(historia.fecha_atencion).toLocaleDateString()}</p>
+          <p><strong>Especialidad:</strong> ${historia.especialidad}</p>
+          <p><strong>Especialista:</strong> ${historia.especialista}</p>
+          <p><strong>Diagnóstico:</strong> ${historia.diagnostico}</p>
+          <hr />
+          <p><strong>Altura:</strong> ${historia.historiaClinica.altura} cm</p>
+          <p><strong>Peso:</strong> ${historia.historiaClinica.peso} kg</p>
+          <p><strong>Temperatura:</strong> ${historia.historiaClinica.temperatura} °C</p>
+          <p><strong>Presión:</strong> ${historia.historiaClinica.presion}</p>
+          ${
+            historia.historiaClinica.datosDinamicos?.length
+              ? `<h5>Datos Dinámicos:</h5>
+                 <ul>
+                   ${historia.historiaClinica.datosDinamicos.map(dato => `<li>${dato.clave}: ${dato.valor}</li>`).join('')}
+                 </ul>`
+              : ''
+          }
+        </div>
+      `)
+      .join('');
+  
+    Swal.fire({
+      title: 'Historia Clínica',
+      html: `<div style="max-height: 400px; overflow-y: auto;">${historiaHtml}</div>`,
+      width: '600px',
+      showCloseButton: true,
+      confirmButtonText: 'Cerrar',
+    });
+  }
+
+  async descargarHistoriaClinica(){
+    try {
+      const historiasClinicas = await this.turnosServ.getHistoriaClinicaCompleta(this.usuario.email);
+      this.generatePDF(historiasClinicas);
+    } catch (error) {
+      console.error('Error al obtener las historias clínicas:', error);
+    }
+  }
+
+  generatePDF(historiaClinicas: historiaClinica[]): void {
+    const doc = new jsPDF();
+  
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const logo = environment.logo64;
+  
+    const logoWidth = 30;
+    const logoHeight = 30;
+    const logoX = (pageWidth - logoWidth) / 2;
+    doc.addImage(logo, 'PNG', logoX, 10, logoWidth, logoHeight);
+  
+    doc.setFontSize(24);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Sanatorio Asclepios', pageWidth / 2, 50, { align: 'center' });
+  
+    doc.setFillColor('#5f83b1');
+    doc.rect(0, 80, pageWidth, 20, 'F');
+    doc.setFontSize(16);
+    doc.setTextColor(255, 255, 255);
+    doc.text('HISTORIA CLÍNICA', pageWidth / 2, 92, { align: 'center' });
+  
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Fecha de Impresión: ${new Date().toLocaleString()}`, 10, 110);
+  
+    if (historiaClinicas.length > 0) {
+      const pacienteNombre = historiaClinicas[0].paciente;
+      doc.text(`Paciente: ${pacienteNombre}`, 10, 120);
+    }
+  
+    let currentY = 130;
+  
+    historiaClinicas.forEach((historia, index) => {
+      doc.setDrawColor('#003366');
+      doc.setLineWidth(0.5);
+      doc.line(10, currentY, pageWidth - 10, currentY);
+      currentY += 10;
+  
+      doc.setFontSize(12);
+      doc.text(`Atención #${index + 1}`, 10, currentY);
+      doc.setFontSize(10);
+      currentY += 10;
+      doc.text(`Fecha de Atención: ${historia.fecha_atencion.toLocaleDateString()}`, 10, currentY);
+      doc.text(`Especialidad: ${historia.especialidad}`, 10, currentY + 10);
+      doc.text(`Especialista: ${historia.especialista}`, 10, currentY + 20);
+      doc.text(`Diagnóstico: ${historia.diagnostico}`, 10, currentY + 30);
+  
+      currentY += 40;
+  
+      autoTable(doc, {
+        startY: currentY,
+        head: [['Dato', 'Valor']],
+        body: [
+          ['Altura', historia.historiaClinica.altura.toString()],
+          ['Peso', historia.historiaClinica.peso.toString()],
+          ['Temperatura', historia.historiaClinica.temperatura.toString()],
+          ['Presión', historia.historiaClinica.presion.toString()],
+          ...(historia.historiaClinica.datosDinamicos || []).map((dato: any) => [
+            dato.clave,
+            dato.valor,
+          ]),
+        ],
+      });
+  
+      currentY = doc.lastAutoTable.finalY + 10;
+  
+      if (currentY > 260) {
+        doc.addPage();
+        currentY = 10;
+      }
+    });
+  
+    doc.save('HistoriasClinicas.pdf');
+  }
+  
 }
 
 

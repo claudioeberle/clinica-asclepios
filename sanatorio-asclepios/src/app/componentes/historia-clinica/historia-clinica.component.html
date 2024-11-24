@@ -1,36 +1,59 @@
-<p>historia-clinica works!</p>
 <div class="container">
-    <h2>Historia Clínica</h2>
+    <div class="header">
+      <img src="../../../assets/iconos/sanatorio-asclepios.png" alt="Sanatorio Asclepios" class="logo" />
+      <h2>Sanatorio Asclepios</h2>
+      <div class="turno-info" *ngIf="turno.paciente && turno.especialista">
+        <p><strong>Paciente:</strong> {{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</p>
+        <p><strong>Especialista:</strong> {{ turno.especialista.nombre }} {{ turno.especialista.apellido }}</p>
+        <p><strong>Fecha:</strong> {{ turno.fecha }}</p>
+        <p><strong>Turno:</strong> {{ turno.inicio }}</p>
+      </div>
+    </div>
+    
+    <hr />
+  
+    <div class="resumen">
+      <p><strong>Reseña:</strong> {{ turno.comentarioResena }}</p>
+      <p><strong>Diagnóstico:</strong> {{ turno.diagnostico || 'No definido' }}</p>
+    </div>
+    
+    <hr />
+  
     <form [formGroup]="historiaForm">
-        <div>
-        <label>Altura (cm):</label>
-        <input type="number" formControlName="altura" />
-        </div>
-        <div>
-        <label>Peso (kg):</label>
-        <input type="number" formControlName="peso" />
-        </div>
-        <div>
-        <label>Temperatura (°C):</label>
-        <input type="number" formControlName="temperatura" />
-        </div>
-        <div>
-        <label>Presión (mmHg):</label>
-        <input type="text" formControlName="presion" placeholder="120/80" />
-        </div>
-
-        <h3>Datos Dinámicos</h3>
-        <div formArrayName="datosDinamicos" *ngFor="let dato of datosDinamicos.controls; let i = index">
+      <h2>Historia Clínica</h2>
+      <div class="form-group">
+        <label for="altura">Altura (cm):</label>
+        <input id="altura" type="number" formControlName="altura" />
+      </div>
+      <div class="form-group">
+        <label for="peso">Peso (kg):</label>
+        <input id="peso" type="number" formControlName="peso" />
+      </div>
+      <div class="form-group">
+        <label for="temperatura">Temperatura (°C):</label>
+        <input id="temperatura" type="number" formControlName="temperatura" />
+      </div>
+      <div class="form-group">
+        <label for="presion">Presión (mmHg):</label>
+        <input id="presion" type="text" formControlName="presion" placeholder="120/80" />
+      </div>
+  
+      <h3>Datos adicionales</h3>
+      <div formArrayName="datosDinamicos" *ngFor="let dato of datosDinamicos.controls; let i = index" class="dato-dinamico">
         <div [formGroupName]="i">
-            <input type="text" placeholder="Clave" formControlName="clave" />
-            <input type="text" placeholder="Valor" formControlName="valor" />
-            <button type="button" (click)="eliminarDatoDinamico(i)">Eliminar</button>
+          <input type="text" placeholder="Clave" formControlName="clave" />
+          <input type="text" placeholder="Valor" formControlName="valor" />
+          <button type="button" (click)="eliminarDatoDinamico(i)">Eliminar</button>
         </div>
-        </div>
-        <button type="button" (click)="agregarDatoDinamico()">Agregar Dato</button>
-
+      </div>
+      <button *ngIf="datosDinamicos.length<3" type="button" (click)="agregarDatoDinamico()">Agregar Dato</button>
+  
+      <hr />
+  
+      <div class="botones">
         <button type="button" (click)="guardar()" [disabled]="historiaForm.invalid">Guardar</button>
+        <button type="button" (click)="cancelar()">Cancelar</button>
+      </div>
     </form>
-</div>
-
+  </div>
   
