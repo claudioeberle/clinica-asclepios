@@ -2,14 +2,14 @@
     <div class="row g-3">
         <div class="col-sm-12">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" formControlName="nombre">
+            <input type="text" formControlName="nombre" appFormatoInputs>
             <div *ngIf="altaFormAdmin.get('nombre')?.invalid && altaFormAdmin.get('nombre')?.touched">
                 <p class="error-msg">Proporcione un Nombre válido. Solo letras. Máx. 50 caracteres.</p>
             </div>
         </div>
         <div class="col-sm-12">
             <label for="apellido" class="form-label">Apellido</label>
-            <input type="text" formControlName="apellido">
+            <input type="text" formControlName="apellido" appFormatoInputs>
             <div *ngIf="altaFormAdmin.get('apellido')?.invalid && altaFormAdmin.get('apellido')?.touched">
                 <p class="error-msg">Proporcione un Apellido válido. Solo letras. Máx. 50 caracteres.</p>
             </div>

@@ -1,4 +1,4 @@
-<div class="container">
+  <div class="container">
     <div class="select-tipo">
     <label for="userType">Filtrar por tipo de usuario: </label>
     <select id="userType" [(ngModel)]="tipoSeleccionado">
@@ -7,9 +7,9 @@
         <option value="Especialista">Especialistas</option>
         <option value="Administrador">Administradores</option>
     </select>
-</div>
+  </div>
 
-<div class="cards-container" *ngIf="tipoSeleccionado && (usuarios$ | async) as usuarios">
+  <div class="cards-container" *ngIf="tipoSeleccionado && (usuarios$ | async) as usuarios">
     <div *ngFor="let usr of usuarios | filtroPorTipoUsr:tipoSeleccionado" class="card">
       <div class="card-image">
         <!-- Paciente: Toggle entre fotos -->
@@ -60,14 +60,14 @@
         *ngIf="tipoSeleccionado === 'Paciente'" 
         class="btn btn-outline-secondary mt-2" 
         (click)="mostrarHistoriaClinica(usr.email)"
-      >
-        <i class="bi bi-download"></i> Ver Historia Clínica
-      </button>
+        >
+          <i class="bi bi-download"></i> Ver Historia Clínica
+        </button>
       </div>
     </div>
-</div>
-
-<div class="descarga">
+  </div>
+  <div class="descarga">
     <button *ngIf="tipoSeleccionado" class="btn btn-success mt-3" (click)="exportarUsuariosExcel(tipoSeleccionado)">Descargar Excel Usuarios</button>
-</div>
-</div>
+  </div>
+
+

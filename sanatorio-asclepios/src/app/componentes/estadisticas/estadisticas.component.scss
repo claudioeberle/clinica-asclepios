@@ -1,0 +1,162 @@
+.informes-container {
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    padding: 35px;
+    background-color: white;
+}
+
+.titulo {
+    display: flex;
+    justify-content: center;
+    background-color: #5f83b1;
+    width: 100%;
+    padding: 15px 0;
+    margin-top: 0;
+}
+
+.titulo h2, .titulo h3 {
+    font-size: xx-large;
+    color: white;
+}
+
+.select-informe{
+    background-color: #5f83b1;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#informeSelect {
+    font-size: large;
+    min-height: 5vh;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;;
+}
+
+label {
+    margin-left: 10px;
+    margin-right: 15px;
+    color: white;
+    font-size: x-large;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: center;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+th {
+    background-color: #4c6a92;
+    color: white;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+tbody tr:hover {
+    background-color: #e2e2e2;
+}
+
+button {
+    margin-left: 45%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #4c6a92;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+td button:hover {
+    background-color: #3a5780;
+}
+
+td button:focus {
+    outline: none;
+}
+
+.chart-container {
+    position: relative;
+    width: 60%;
+    margin: 20px auto;
+    background-color: white;
+    font-size: 1.8em;
+    border: 2px solid rgb(76, 106, 146);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#turnosPorEspecialidadChart{
+    font-size: large;
+}
+
+.pdf-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    background-color: #5f83b1;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pdf-button:hover {
+    background-color: #4c6a92;
+  }
+  
+  .pdf-button i {
+    margin-right: 8px;
+  }
+
+  .filtro{
+    background-color: #5f83b1;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  
+  label{
+    margin-right: 10px;
+  }
+
+  input{
+    margin-right: 35;
+  }
+
+  .button-filtro{
+    margin-right: 30px;
+  }
+

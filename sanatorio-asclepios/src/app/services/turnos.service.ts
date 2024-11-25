@@ -131,6 +131,173 @@ export class TurnosService {
   
     return historiasClinicas;
   }
+
+  async contarTurnosPorEspecialidad(especialidad?: string): Promise<{ [key: string]: number }> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    let q;
+  
+    if (especialidad) {
+      q = query(turnosRef, where('especialidad', '==', especialidad));
+    } else {
+      q = query(turnosRef);
+    }
+  
+    try {
+      const querySnapshot = await getDocs(q);
+      const turnos: Turno[] = [];
+  
+      querySnapshot.forEach((doc) => {
+        const turno = doc.data() as Turno;
+        turno.id = doc.id;
+        turnos.push(turno);
+      });
+  
+      const especialidadesCount: { [key: string]: number } = {};
+  
+      turnos.forEach(turno => {
+        const especialidad = turno.especialidad;
+        if (especialidad) {
+          if (!especialidadesCount[especialidad]) {
+            especialidadesCount[especialidad] = 0;
+          }
+          especialidadesCount[especialidad]++;
+        }
+      });
+  
+      return especialidadesCount;
+  
+    } catch (error) {
+      console.error('Error al contar los turnos por especialidad:', error);
+      return {};
+    }
+  }
+
+  async contarTurnosPorFecha(fecha?: string): Promise<{ [key: string]: number }> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    let q;
+  
+    if (fecha) {
+      const fechaConvertida = fecha;
+      q = query(turnosRef, where('fecha', '==', fechaConvertida));
+    } else {
+      q = query(turnosRef);
+    }
+  
+    try {
+      const querySnapshot = await getDocs(q);
+      const turnos: Turno[] = [];
+  
+      querySnapshot.forEach((doc) => {
+        const turno = doc.data() as Turno;
+        turno.id = doc.id;
+        turnos.push(turno);
+      });
+  
+      const fechasCount: { [key: string]: number } = {};
+      turnos.forEach(turno => {
+        const fechaTurno = turno.fecha || '';
+        if (fechaTurno) {
+          if (!fechasCount[fechaTurno]) {
+            fechasCount[fechaTurno] = 0;
+          }
+          fechasCount[fechaTurno]++;
+        }
+      });
+      return fechasCount;
+  
+    } catch (error) {
+      console.error('Error al contar los turnos por fecha:', error);
+      return {};
+    }
+  }
+  
+  async contarTurnosPorEspecialista(
+    fechaDesde: string = '',
+    fechaHasta: string = '',
+    estadoTurno: string = ''
+  ): Promise<{ [key: string]: number }> {
+    const turnosRef = collection(this.firestore, 'turnos');
+    let q = query(turnosRef);
+  
+    if (estadoTurno && estadoTurno.toLowerCase() !== 'todos') {
+      q = query(q, where('estado', '==', estadoTurno));
+    }
+  
+    try {
+      const querySnapshot = await getDocs(q);
+      const turnos: Turno[] = [];
+  
+      querySnapshot.forEach((doc) => {
+        const turno = doc.data() as Turno;
+        turno.id = doc.id;
+        turnos.push(turno);
+      });
+  
+      const fechaDesdeDate = fechaDesde ? this.convertirFechaFormatoAFechaPicker(fechaDesde) : null;
+      const fechaHastaDate = fechaHasta ? this.convertirFechaFormatoAFechaPicker(fechaHasta) : null;
+      console.log(fechaDesdeDate);
+      console.log(fechaHastaDate);
+
+      const turnosFiltrados = turnos.filter((turno) => {
+        if (turno.fecha) {
+          const fechaTurno = this.convertirFechaFormatoAFecha(turno.fecha);
+          console.log(fechaTurno);
+          if (
+            (fechaDesdeDate && fechaTurno < fechaDesdeDate) ||
+            (fechaHastaDate && fechaTurno > fechaHastaDate)
+          ) {
+            return false;
+          }
+        }
+        return true;
+      });
+  
+      const turnosPorEspecialista: { [key: string]: number } = {};
+      turnosFiltrados.forEach((turno) => {
+        const especialista = turno.especialista;
+  
+        if (especialista && especialista.email && especialista.nombre && especialista.apellido) {
+          const claveEspecialista = `${especialista.nombre} ${especialista.apellido}`;
+  
+          if (!turnosPorEspecialista[claveEspecialista]) {
+            turnosPorEspecialista[claveEspecialista] = 0;
+          }
+          turnosPorEspecialista[claveEspecialista]++;
+        }
+      });
+  
+      return turnosPorEspecialista;
+    } catch (error) {
+      console.error('Error al contar los turnos por especialista:', error);
+      return {};
+    }
+  }
+  
+  convertirFechaFormatoAFecha(fecha: string): Date {
+    const partes = fecha.split('/');
+    if (partes.length === 3) {
+      const dia = parseInt(partes[0], 10);
+      const mes = parseInt(partes[1], 10) - 1;
+      const año = parseInt(partes[2], 10);
+      return new Date(año, mes, dia);
+    }
+    throw new Error(`Formato de fecha inválido: ${fecha}`);
+  }
+
+  convertirFechaFormatoAFechaPicker(fecha: string): Date {
+    const partes = fecha.split('-');
+    if (partes.length === 3) {
+      const dia = parseInt(partes[2], 10);
+      const mes = parseInt(partes[1], 10) - 1;
+      const año = parseInt(partes[0], 10);
+      return new Date(año, mes, dia);
+    }
+    throw new Error(`Formato de fecha inválido: ${fecha}`);
+  }
+  
+
+
+  
   
 
 

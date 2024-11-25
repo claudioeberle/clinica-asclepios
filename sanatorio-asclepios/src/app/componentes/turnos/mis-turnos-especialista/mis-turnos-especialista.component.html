@@ -22,11 +22,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let turno of turnosFiltrados">
-        <td [innerHTML]="(turno.especialidad ?? '') | highlight: filtroBusqueda"></td>
-        <td [innerHTML]="((turno.paciente?.nombre ?? '') + ' ' + (turno.paciente?.apellido ?? '')) | highlight: filtroBusqueda"></td>
-        <td [innerHTML]="(turno.fecha ?? '') | highlight: filtroBusqueda"></td>
-        <td [innerHTML]="(turno.inicio ?? '') | highlight: filtroBusqueda"></td>
-        <td [innerHTML]="(turno.estado) | highlight: filtroBusqueda"></td>
+        <td appHighlightCoincidencia [word]="filtroBusqueda">{{ turno.especialidad ?? '' }}</td>
+        <td appHighlightCoincidencia [word]="filtroBusqueda">{{ (turno.paciente?.nombre ?? '') + ' ' + (turno.paciente?.apellido ?? '') }}</td>
+        <td appHighlightCoincidencia [word]="filtroBusqueda">{{ turno.fecha ?? '' }}</td>
+        <td appHighlightCoincidencia [word]="filtroBusqueda">{{ turno.inicio ?? '' }}</td>
+        <td appHighlightEstado="{{ turno.estado }}" appHighlightCoincidencia [word]="filtroBusqueda">{{ turno.estado }}</td>   
         <td>
           <!-- Cancelar Turno -->
           <button 

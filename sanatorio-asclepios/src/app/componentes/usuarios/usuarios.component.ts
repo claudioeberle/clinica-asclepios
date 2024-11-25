@@ -28,7 +28,8 @@ import { MapToUsuarioPipe } from '../../pipes/map-to-usuario.pipe';
     FotoUsuarioPipe],
 
   templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.scss'
+  styleUrl: './usuarios.component.scss',
+  animations: [],
 })
 export class UsuariosComponent implements OnInit{
   

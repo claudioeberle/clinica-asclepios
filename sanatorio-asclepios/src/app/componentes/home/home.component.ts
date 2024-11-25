@@ -7,7 +7,8 @@ import { SpinnerService } from '../../services/spinner.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
+  animations: [],
 })
 export class HomeComponent {
   images: string[] = [

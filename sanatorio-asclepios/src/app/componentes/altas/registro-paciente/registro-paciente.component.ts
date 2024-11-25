@@ -9,11 +9,19 @@ import { EspecialidadesService } from '../../../services/especialidades.service'
 import { SpinnerService } from '../../../services/spinner.service';
 import { CommonModule } from '@angular/common';
 import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha";
+import { FormatoInputsDirective } from '../../../directives/formato-inputs.directive';
 
 @Component({
   selector: 'app-registro-paciente',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, RecaptchaFormsModule, RecaptchaModule],
+  imports: [
+    ReactiveFormsModule, 
+    FormsModule, 
+    CommonModule, 
+    RecaptchaFormsModule, 
+    RecaptchaModule,
+    FormatoInputsDirective
+  ],
   templateUrl: './registro-paciente.component.html',
   styleUrl: './registro-paciente.component.scss'
 })

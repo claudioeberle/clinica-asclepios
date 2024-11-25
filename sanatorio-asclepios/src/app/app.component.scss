@@ -91,19 +91,15 @@ html, body {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;
   width: 250px;
   height: 100%;  
   background-color:#2e62a6;
   color: white;
   padding-top: 20px;
-  transition: 0.3s;
   margin-top: 100px;
   z-index: 1000;
-}
-
-.sidebar.active {
-  left: 0;
+  align-items: center;
+  transform: translateX(-100%);
 }
 
 .sidebar nav a {
@@ -111,11 +107,16 @@ html, body {
   padding: 15px;
   color: white;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .sidebar nav a:hover {
   background-color: gray;
+}
+
+.sidebar nav a img{
+  width: 20px;
+  margin-right: 15px;
 }
 
 .footer {
@@ -141,6 +142,7 @@ html, body {
   background-color:grey;
   width: 100%;
   height: auto;
+  padding-bottom: 35px;
   margin-bottom: 35px;
 }
 

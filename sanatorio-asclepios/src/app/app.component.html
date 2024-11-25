@@ -1,9 +1,11 @@
 <div class="header">
     <button class="menu-button" (click)="toggleSidebar()"><img src="../assets/iconos/menu-barra-icon.svg" alt="">MENÚ</button>
-    <div class="titulo">
-        <h1>Sanatorio </h1>
-        <img src="../../../assets/iconos/sanatorio-asclepios.png" alt="sanatorio-asclepios">
-        <h1> Asclepios</h1>
+    <div class="titulo" (click)="goTo('home')">
+      <h1>Sanatorio </h1>
+      <img src="../../../assets/iconos/sanatorio-asclepios.png" 
+      alt="sanatorio-asclepios"
+      [@spinAnimation]="spin">
+      <h1> Asclepios</h1>
     </div>
     <div class="sesion-buttons">
       <button *ngIf="!usuario" class="login-button" (click)="openModal()">
@@ -17,18 +19,30 @@
       </div>
     </div>
 </div>
-<div class="sidebar" [class.active]="isSidebarOpen">
+<div class="sidebar" [@sideBarAnimation]="isSidebarOpen ? 'open' : 'closed'">
     <nav>
-        <a *ngIf="!usuario" (click)="goTo('home')" (click)="toggleSidebar()">Home</a>
-        <a *ngIf="usuario" (click)="goTo('servicios')" (click)="toggleSidebar()">Servicios</a>
-        <a (click)="goTo('contacto')" (click)="toggleSidebar()">Contacto</a>
+        <a *ngIf="!usuario" (click)="goTo('home')" (click)="toggleSidebar()"><img src="../assets/iconos/home-ico.svg" alt="">Home</a>
+        <a *ngIf="usuario" (click)="goTo('servicios')" (click)="toggleSidebar()"><img src="../assets/iconos/home-ico.svg" alt="">Servicios</a>
+        <a *ngIf="usuario.esAdmin" (click)="goTo('usuarios')" (click)="toggleSidebar()"><img src="../assets/iconos/usuarios-icon.svg" alt="">Usuarios</a>
+        <a *ngIf="usuario.esAdmin" (click)="goTo('registro')" (click)="toggleSidebar()"><img src="../assets/iconos/alta-usuario-icon.svg" alt="">Alta Usuario</a>
+        <a *ngIf="usuario.esAdmin" (click)="goTo('turnos')" (click)="toggleSidebar()"><img src="../assets/iconos/turnos-icon.svg" alt="">Turnos</a>
+        <a *ngIf="usuario.esPaciente" (click)="goTo('turnos-misturnos-paciente')" (click)="toggleSidebar()"><img src="../assets/iconos/turnos-icon.svg" alt="">Mis Turnos</a>
+        <a *ngIf="usuario.esEspecialista" (click)="goTo('turnos-misturnos-especialista')" (click)="toggleSidebar()"><img src="../assets/iconos/turnos-icon.svg" alt="">Mis Turnos</a>
+        <a *ngIf="usuario" (click)="goTo('perfil')" (click)="toggleSidebar()"><img src="../assets/iconos/usuario-icon.svg" alt="">Mi Perfil</a>
+        <a *ngIf="usuario.esEspecialista" (click)="goTo('pacientes')" (click)="toggleSidebar()"><img src="../assets/iconos/usuarios-icon.svg" alt="">Mis Pacientes</a>
+        <a *ngIf="usuario.esAdmin" (click)="goTo('estadisticas')" (click)="toggleSidebar()"><img src="../assets/iconos/charts-icon.svg" alt="">Estadísticas</a>
+        <a *ngIf="usuario.esAdmin || usuario.esPaciente" (click)="goTo('turnos-alta')" (click)="toggleSidebar()"><img src="../assets/iconos/turnos-alta.svg" alt="">Pedir Turno</a>
+        <a (click)="goTo('contacto')" (click)="toggleSidebar()"><img src="../assets/iconos/email-icon.svg" alt="">Contacto</a>
     </nav>
   </div>
   <div class="body">
     <app-spinner *ngIf="isLoading"></app-spinner>
-    <router-outlet/>
+    <div [@routeAnimations]="prepareRoute(outlet)">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </div>
   </div>
-<app-login *ngIf="isModalOpen" (close)="closeModal()"></app-login>
+  <app-login *ngIf="isModalOpen" (close)="closeModal()" @modalAnimation>
+</app-login>
 <div class="footer">
   <div><img src="../assets/iconos/clock-icon.svg" alt="horarios-icon"> Horarios: Lunes a Viernes 8:00 a 19:00 y Sábados 8:00 a 14:00</div>
   <div><img src="../assets/iconos/locacion-icon.svg" alt="ubicacion-icon"> Av. Patricias Argentinas 351, C1405 Cdad. Autónoma de Buenos Aires</div>

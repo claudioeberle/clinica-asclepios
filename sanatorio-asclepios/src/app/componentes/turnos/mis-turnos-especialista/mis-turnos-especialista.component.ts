@@ -10,13 +10,19 @@ import { historiaClinica } from '../../../interfaces/historiaClinica';
 import { MatDialog } from '@angular/material/dialog';
 import { HistoriaClinicaComponent } from '../../historia-clinica/historia-clinica.component';
 import { FormsModule } from '@angular/forms';
-import { HighlightPipe } from '../../../pipes/highlight.pipe';
+import { HighlightEstadoDirective } from '../../../directives/highlight-estado.directive';
+import { HighlightCoincidenciaDirective } from '../../../directives/highlight-coincidencia.directive';
 
 
 @Component({
   selector: 'app-mis-turnos-especialista',
   standalone: true,
-  imports: [CommonModule, FormsModule, HighlightPipe],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    HighlightEstadoDirective,
+    HighlightCoincidenciaDirective
+  ],
   templateUrl: './mis-turnos-especialista.component.html',
   styleUrl: './mis-turnos-especialista.component.scss'
 })

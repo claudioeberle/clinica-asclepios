@@ -8,7 +8,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if(!session.esUsuarioAdmin()){
-    router.navigateByUrl("/");
+    router.navigateByUrl("/servicios");
   }
 
   return session.esUsuarioAdmin();

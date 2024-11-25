@@ -6,12 +6,18 @@ import { TurnosService } from '../../../services/turnos.service';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HighlightPipe } from '../../../pipes/highlight.pipe';
+import { HighlightEstadoDirective } from '../../../directives/highlight-estado.directive';
+import { HighlightCoincidenciaDirective } from '../../../directives/highlight-coincidencia.directive';
 
 @Component({
   selector: 'app-mis-turnos-paciente',
   standalone: true,
-  imports: [CommonModule, FormsModule, HighlightPipe],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    HighlightEstadoDirective,
+    HighlightCoincidenciaDirective
+  ],
   templateUrl: './mis-turnos-paciente.component.html',
   styleUrl: './mis-turnos-paciente.component.scss'
 })

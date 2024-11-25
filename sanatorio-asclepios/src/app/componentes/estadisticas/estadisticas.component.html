@@ -1,0 +1,150 @@
+<div class="informes-container">
+    <div class="titulo"><h2>Informes</h2></div>
+    <div class="select-informe">
+      <label for="informeSelect">Seleccionar Informe:</label>
+      <select id="informeSelect" [(ngModel)]="selectedInforme" (change)="onInformeChange()">
+        <option *ngFor="let informe of informes" [value]="informe.value">{{ informe.label }}</option>
+      </select>
+    </div>
+  
+    <div *ngIf="selectedInforme === 'logIngresos'">
+      <div class="titulo"><h3>Logs de Ingresos al Sistema</h3></div>
+      <button class="btn btn-primary" (click)="descargarExcelLogs(logs)">Descargar a Excel</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs">
+            <td>{{ log.usuario.nombre }} {{ log.usuario.apellido }}</td>
+            <td>{{ log.fecha | timestamp }}</td>
+            <td>{{ log.accion }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="selectedInforme === 'turnosEspecialidad'">
+      <div class="titulo">
+        <h3>Cantidad de Turnos por Especialidad</h3>
+      </div>
+      <button
+        (click)="descargarPDF(
+          'turnosPorEspecialidadChart',
+          getDatosTablaEspecialidad(),
+          ['Especialidad', 'Cantidad'],
+          'Turnos por Especialidad'
+        )"class="pdf-button"><i class="fas fa-file-pdf"></i> Descargar PDF
+      </button>
+      <div class="chart-container">
+        <canvas id="turnosPorEspecialidadChart"></canvas>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Especialidad</th>
+            <th>Cantidad de Turnos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dato of arrayTurnosPorEspecialidad">
+            <td>{{ dato.especialidad }}</td>
+            <td>{{ dato.cantidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="selectedInforme === 'turnosDia'">
+      <div class="titulo">
+        <h3>Cantidad de Turnos por Día</h3>
+      </div>
+      <button
+        (click)="descargarPDF(
+          'turnosPorDiaChart',
+          getDatosTablaDia(),
+          ['Fecha', 'Cantidad'],
+          'Turnos por Día'
+        )"
+        class="pdf-button"><i class="fas fa-file-pdf"></i> Descargar PDF
+      </button>
+      <div>
+        <canvas id="turnosPorDiaChart"></canvas>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cantidad de Turnos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let turno of turnosPorDiaArray">
+            <td>{{ turno.fecha }}</td>
+            <td>{{ turno.cantidad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="selectedInforme === 'turnosPorMedico'">
+      <div class="titulo"><h3>Cantidad de Turnos por Médico</h3></div>
+      
+      <div class="filtro">
+        <label for="fechaDesde">Desde:</label>
+        <input type="date" id="fechaDesde" [(ngModel)]="fechaDesde" />
+      
+        <label for="fechaHasta">Hasta:</label>
+        <input type="date" id="fechaHasta" [(ngModel)]="fechaHasta" />
+      
+        <label for="estadoTurno">Estado:</label>
+        <select id="estadoTurno" [(ngModel)]="estadoTurno">
+          <option value="todos">Todos</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="aceptado">Aceptado</option>
+          <option value="cancelado">Cancelado</option>
+          <option value="rechazado">Rechazado</option>
+          <option value="realizado">Realizado</option>
+        </select>
+      
+        <button class="button-filtro" (click)="obtenerTurnosPorMedico()">Obtener Turnos</button>
+      </div>
+      <div *ngIf="turnosPorMedicoArray.length == 0">
+        <h2>No hay turnos entre esas fechas y en ese estado.</h2>
+      </div>
+      <div *ngIf="turnosPorMedicoArray.length > 0">
+        <button
+          (click)="descargarPDF(
+            'turnosPorMedicoChart',
+            getDatosTablaEspecialista(),
+            ['Especialista', 'Cantidad'],
+            'Turnos por Especialista'
+          )"
+          class="pdf-button"><i class="fas fa-file-pdf"></i> Descargar PDF
+        </button>
+        <div class="chart-container">
+          <canvas id="turnosPorMedicoChart"></canvas>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Especialista</th>
+              <th>Cantidad de Turnos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of turnosPorMedicoArray">
+              <td>{{ dato.especialista }}</td>
+              <td>{{ dato.cantidad }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- <pre>{{ turnosPorMedico | json }}</pre> -->
+    </div>
+
+  </div>

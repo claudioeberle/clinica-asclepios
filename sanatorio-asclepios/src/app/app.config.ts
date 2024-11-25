@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -7,6 +7,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimations, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +22,9 @@ export const appConfig: ApplicationConfig = {
     )), 
     provideAuth(() => getAuth()), 
     provideFirestore(() => getFirestore()), 
-    provideStorage(() => getStorage()), provideAnimationsAsync()
-
+    provideStorage(() => getStorage()), 
+    provideAnimationsAsync(),
+    provideAnimations(),
+    importProvidersFrom(BrowserAnimationsModule),
   ]
 };

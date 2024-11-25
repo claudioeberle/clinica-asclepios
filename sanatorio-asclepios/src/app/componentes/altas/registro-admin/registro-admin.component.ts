@@ -8,11 +8,19 @@ import { AuthService } from '../../../services/auth.service';
 import { SpinnerService } from '../../../services/spinner.service';
 import { CommonModule } from '@angular/common';
 import { RecaptchaModule, RecaptchaFormsModule } from "ng-recaptcha";
+import { FormatoInputsDirective } from '../../../directives/formato-inputs.directive';
 
 @Component({
   selector: 'app-registro-admin',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, RecaptchaFormsModule, RecaptchaModule],
+  imports: [
+    ReactiveFormsModule, 
+    FormsModule, 
+    CommonModule, 
+    RecaptchaFormsModule, 
+    RecaptchaModule,
+    FormatoInputsDirective
+  ],
   templateUrl: './registro-admin.component.html',
   styleUrl: './registro-admin.component.scss'
 })

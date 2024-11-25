@@ -48,7 +48,7 @@ export class LoginComponent {
         || (usuario.esEspecialista && this.auth.EmailVerificado() && usuario.cuenta_valida)
         || (usuario.esAdmin && usuario.cuenta_valida)){
           this.auth.SetUsuario(usuario);
-          this.logSrv.guardarLog({fecha:new Date(),usuario:usuario.email,accion:'login'});
+          this.logSrv.guardarLog({fecha:new Date(),usuario:usuario,accion:'login'});
           console.log(res);
           this.closeModal();
           this.router.navigateByUrl('servicios');
