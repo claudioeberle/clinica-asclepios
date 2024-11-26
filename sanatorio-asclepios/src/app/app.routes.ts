@@ -31,7 +31,7 @@ export const routes: Routes = [
     { path: 'servicios', component: ConsolaComponent, canActivate: [sesionGuard], data: { animation: 'animation1' } },
     { path: 'usuarios', component: UsuariosComponent, canActivate: [sesionGuard], data: { animation: 'animation2' } },
     { path: 'spinner', component: SpinnerComponent },
-    { path: 'contacto', component: ContactoComponent },
+    { path: 'contacto', component: ContactoComponent, data: { animation: 'animation2' } },
     { path: 'turnos-alta', component: AltaTurnoComponent, canActivate: [sesionGuard]},
     { path: 'turnos-misturnos-paciente', component: MisTurnosPacienteComponent, canActivate: [sesionGuard], data: { animation: 'animation2' } },
     { path: 'turnos-misturnos-especialista', component: MisTurnosEspecialistaComponent, canActivate: [sesionGuard], data: { animation: 'animation2' } },

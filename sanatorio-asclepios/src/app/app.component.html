@@ -44,6 +44,6 @@
   <app-login *ngIf="isModalOpen" (close)="closeModal()" @modalAnimation>
 </app-login>
 <div class="footer">
-  <div><img src="../assets/iconos/clock-icon.svg" alt="horarios-icon"> Horarios: Lunes a Viernes 8:00 a 19:00 y Sábados 8:00 a 14:00</div>
-  <div><img src="../assets/iconos/locacion-icon.svg" alt="ubicacion-icon"> Av. Patricias Argentinas 351, C1405 Cdad. Autónoma de Buenos Aires</div>
+  <div><img src="../assets/iconos/clock-icon.svg" alt="horarios-icon" [@spinAnimation]="spin"> Horarios: Lunes a Viernes 8:00 a 19:00 y Sábados 8:00 a 14:00</div>
+  <div><img src="../assets/iconos/locacion-icon.svg" alt="ubicacion-icon" [@spinAnimation]="spin"> Av. Patricias Argentinas 351, C1405 Cdad. Autónoma de Buenos Aires</div>
 </div>

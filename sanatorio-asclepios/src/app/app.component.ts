@@ -6,13 +6,24 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { SpinnerComponent } from './componentes/spinner/spinner.component';
 import { SpinnerService } from './services/spinner.service';
-import { sideBarAnimation, spinAnimation, modalAnimation, slideInAnimation } from '../animations';
+import { 
+  sideBarAnimation, 
+  spinAnimation, 
+  modalAnimation, 
+  slideInAnimation
+} from '../animations';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, LoginComponent, CommonModule, SpinnerComponent],
+  imports: [
+    RouterOutlet, 
+    FormsModule, 
+    LoginComponent, 
+    CommonModule, 
+    SpinnerComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   animations: [
@@ -58,9 +69,7 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.showSpinner(5000);
-    setInterval(() => {
-      this.spin = !this.spin;
-    }, 5000);
+    setInterval(() => {this.spin = !this.spin;}, 5000);
   }
 
   toggleSidebar(): void {
