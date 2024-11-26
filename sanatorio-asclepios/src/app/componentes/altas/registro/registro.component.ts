@@ -44,4 +44,8 @@ export class RegistroComponent implements OnInit{
   goTo(destino: string) {
     this.tipoRegistro = destino;
   }
+
+  volver(){
+    this.tipoRegistro = '';
+  }
 }

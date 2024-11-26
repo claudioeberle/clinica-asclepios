@@ -317,47 +317,7 @@ export class MisTurnosEspecialistaComponent {
     });
   }
 
-  async mostrarHistoriaClinica(email:string): Promise<void> {
-    const historiasClinicas = await this.turnosService.getHistoriaClinicaCompleta(email);
-  
-    if (!historiasClinicas.length) {
-      Swal.fire('Sin Historia Clínica', 'No hay atenciones registradas para este paciente.', 'info');
-      return;
-    }
-  
-    const historiaHtml = historiasClinicas
-      .map(historia => `
-        <div style="border: 1px solid #5f83b1; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-          <h4 style="color: #5f83b1;">Atención</h4>
-          <p><strong>Fecha de Atención:</strong> ${new Date(historia.fecha_atencion).toLocaleDateString()}</p>
-          <p><strong>Especialidad:</strong> ${historia.especialidad}</p>
-          <p><strong>Especialista:</strong> ${historia.especialista}</p>
-          <p><strong>Diagnóstico:</strong> ${historia.diagnostico}</p>
-          <hr />
-          <p><strong>Altura:</strong> ${historia.historiaClinica.altura} cm</p>
-          <p><strong>Peso:</strong> ${historia.historiaClinica.peso} kg</p>
-          <p><strong>Temperatura:</strong> ${historia.historiaClinica.temperatura} °C</p>
-          <p><strong>Presión:</strong> ${historia.historiaClinica.presion}</p>
-          ${
-            historia.historiaClinica.datosDinamicos?.length
-              ? `<h5>Datos Dinámicos:</h5>
-                 <ul>
-                   ${historia.historiaClinica.datosDinamicos.map(dato => `<li>${dato.clave}: ${dato.valor}</li>`).join('')}
-                 </ul>`
-              : ''
-          }
-        </div>
-      `)
-      .join('');
-  
-    Swal.fire({
-      title: 'Historia Clínica',
-      html: `<div style="max-height: 400px; overflow-y: auto;">${historiaHtml}</div>`,
-      width: '600px',
-      showCloseButton: true,
-      confirmButtonText: 'Cerrar',
-    });
-  }
+
 
 
 

@@ -122,9 +122,9 @@
             'turnosPorMedicoChart',
             getDatosTablaEspecialista(),
             ['Especialista', 'Cantidad'],
-            'Turnos por Especialista'
-          )"
-          class="pdf-button"><i class="fas fa-file-pdf"></i> Descargar PDF
+            'Turnos por Especialista',
+            'Desde: ' + fechaDesde + ' - Hasta: ' + fechaHasta + ' - Estado: ' + estadoTurno)"
+          class="pdf-button">Descargar PDF
         </button>
         <div class="chart-container">
           <canvas id="turnosPorMedicoChart"></canvas>

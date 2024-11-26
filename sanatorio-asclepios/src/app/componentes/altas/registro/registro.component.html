@@ -1,6 +1,6 @@
 <div class="titulo"><h2>Registro de Usuarios</h2></div>
 <div class="container">
-    <div class="row g-5 button-group">
+    <div *ngIf="!tipoRegistro" class="row g-5 button-group">
         <button class="btn btn-primary" (click)="goTo('paciente')">
             <img src="../../../../assets/iconos/paciente.svg" alt="paciente-icon">PACIENTE</button>
         <button class="btn btn-primary" (click)="goTo('especialista')">
@@ -8,6 +8,8 @@
         <button class="btn btn-primary" *ngIf="esUsuarioAdmin" (click)="goTo('administrador')">
             <img src="../../../../assets/iconos/admin.svg" alt="admin-icon">ADMINISTRADOR</button>
     </div>
+    <button class="btn btn-primary" *ngIf="tipoRegistro" (click)="volver()">
+        <img src="../../../../assets/iconos/back-icon.svg" alt="volver-icon">Volver</button>
 </div>
 <div class="forms-container" *ngIf="tipoRegistro">   
     <div *ngIf="tipoRegistro === 'paciente'">

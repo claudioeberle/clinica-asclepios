@@ -19,21 +19,21 @@ export class HighlightEstadoDirective implements OnChanges {
     switch (this.appHighlightEstado.toLowerCase()) {
       case 'aceptado':
       case 'realizado':
-        backgroundColor = '#d4edda'; // Verde claro
+        backgroundColor = '#d4edda';
         break;
       case 'cancelado':
       case 'rechazado':
-        backgroundColor = '#f8d7da'; // Rojo claro
+        backgroundColor = '#f8d7da';
         break;
       case 'pendiente':
-        backgroundColor = '#fff3cd'; // Amarillo claro
+        backgroundColor = '#fff3cd';
         break;
       default:
-        backgroundColor = '#ffffff'; // Blanco (por defecto)
+        backgroundColor = '#ffffff';
         break;
     }
 
     this.renderer.setStyle(this.el.nativeElement, 'background-color', backgroundColor);
-    this.renderer.setStyle(this.el.nativeElement, 'color', '#000'); // Texto negro para mejor contraste
+    this.renderer.setStyle(this.el.nativeElement, 'color', '#000');
   }
 }

@@ -327,7 +327,13 @@ export class EstadisticasComponent {
     this.Chart = new Chart<'pie'>('turnosPorMedicoChart', config);
   }
 
-  descargarPDF(chartId: string, tableData: any[], tableHeaders: string[], subtitulo: string): void {
+  descargarPDF(
+    chartId: string,
+    tableData: any[],
+    tableHeaders: string[],
+    subtitulo: string,
+    subtituloExtra?: string
+  ): void {
     const doc = new jsPDF();
   
     const logo = environment.logo64 as string;
@@ -346,6 +352,12 @@ export class EstadisticasComponent {
     doc.setTextColor(255, 255, 255);
     doc.text(subtitulo, pageWidth / 2, 57, { align: 'center' });
   
+    if (subtituloExtra) {
+      doc.setFontSize(12);
+      doc.setTextColor(76, 106, 146);
+      doc.text(subtituloExtra, pageWidth / 2, 67, { align: 'center' });
+    }
+  
     const chart = document.getElementById(chartId) as HTMLCanvasElement;
     if (chart) {
       const chartImage = chart.toDataURL('image/png');
@@ -353,7 +365,7 @@ export class EstadisticasComponent {
       const aspectRatio = chart.height / chart.width;
       const chartHeight = chartWidth * aspectRatio;
   
-      doc.addImage(chartImage, 'PNG', 40, 70, chartWidth, chartHeight);
+      doc.addImage(chartImage, 'PNG', 40, subtituloExtra ? 80 : 70, chartWidth, chartHeight); // Ajustar posición si hay subtítulo extra
     }
   
     doc.addPage();
@@ -369,9 +381,8 @@ export class EstadisticasComponent {
       headStyles: { fillColor: [76, 106, 146], textColor: [255, 255, 255] },
       styles: { fontSize: 10, align: 'center' },
     });
-  
     doc.save(subtitulo + '.pdf');
-  }    
+  }  
 
   getInformeLabel(): string {
     const informe = this.informes.find((info) => info.value === this.selectedInforme);
@@ -389,4 +400,5 @@ export class EstadisticasComponent {
   getDatosTablaDia(): any[] {
     return this.turnosPorDiaArray.map(dato => [dato.fecha, dato.cantidad]);
   }
+
 }
