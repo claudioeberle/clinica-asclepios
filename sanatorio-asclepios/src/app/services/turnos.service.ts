@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Turno } from '../interfaces/turno';
 import { addDoc, collection, doc, Firestore, getDocs, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import { historiaClinica } from '../interfaces/historiaClinica';
+import { usuario } from '../interfaces/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -363,11 +364,37 @@ export class TurnosService {
     throw new Error(`Formato de fecha inválido: ${fecha}`);
   }
   
+  async getEspecialistasPorPaciente(pacienteEmail: string): Promise<usuario[]> {
+    const especialistasMap = new Map<string, usuario>();
 
+    try {
+      const turnosRef = collection(this.firestore, 'turnos');
 
-  
-  
+      const q = query(
+        turnosRef,
+        where('paciente.email', '==', pacienteEmail),
+        where('estado', '==', 'realizado')
+      );
 
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const turno = doc.data() as Turno;
 
-
+        if (turno.especialista && !especialistasMap.has(turno.especialista.email)) {
+          especialistasMap.set(turno.especialista.email, turno.especialista);
+        }
+      });
+    } catch (error) {
+      console.error('Error al obtener especialistas:', error);
+    }
+    console.log(especialistasMap.values());
+    return Array.from(especialistasMap.values());
+  }
 }
+
+  
+  
+
+
+
+

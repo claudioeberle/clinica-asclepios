@@ -27,6 +27,9 @@ export class PerfilComponent implements OnInit{
   prompt: string = '';
   especialidades: any[] = [];
   disponibilidad:any;
+  especialistas: usuario[] = [];
+  especialistaSeleccionado: string | usuario = 'Todos';
+  historiasFiltradas:any;
   horario: { [key: string]: { dia: string; desde: string; hasta: string } } = {
     lunes: { dia: 'lunes', desde: '', hasta: '' },
     martes: { dia: 'martes', desde: '', hasta: '' },
@@ -47,6 +50,7 @@ export class PerfilComponent implements OnInit{
 
   async ngOnInit(){
     this.actualizarHorarios();
+    await this.cargarEspecialistas();
   }
 
   toggleFoto() {
@@ -215,10 +219,22 @@ export class PerfilComponent implements OnInit{
     });
   }
 
-  async descargarHistoriaClinica(){
+  async descargarHistoriaClinica() {
     try {
       const historiasClinicas = await this.turnosServ.getHistoriaClinicaCompleta(this.usuario.email);
-      this.generatePDF(historiasClinicas);
+      //console.log(historiasClinicas);
+      //console.log('especialista seleccionado: ' + this.especialistaSeleccionado);
+      
+      if (this.especialistaSeleccionado === 'Todos') {
+        this.historiasFiltradas = historiasClinicas;
+      } else {
+        this.historiasFiltradas = historiasClinicas.filter(historia => {
+          //console.log(historia);
+          //console.log('historia especialista: ' + historia.especialista);
+          return this.especialistaSeleccionado === this.obtenerApellido(historia.especialista);
+        });
+      }
+      this.generatePDF(this.historiasFiltradas);
     } catch (error) {
       console.error('Error al obtener las historias clínicas:', error);
     }
@@ -297,6 +313,19 @@ export class PerfilComponent implements OnInit{
     });
   
     doc.save('HistoriasClinicas.pdf');
+  }
+
+  async cargarEspecialistas() {
+    try {
+      this.especialistas = await this.turnosServ.getEspecialistasPorPaciente(this.usuario.email);
+    } catch (error) {
+      console.error('Error al cargar los especialistas:', error);
+    }
+  }
+
+  obtenerApellido(nombreCompleto: string): string {
+    const partes = nombreCompleto.split(' ');
+    return partes[partes.length - 1];
   }
   
 }

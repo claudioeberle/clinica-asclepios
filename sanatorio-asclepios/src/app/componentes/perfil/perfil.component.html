@@ -19,6 +19,15 @@
 
     </div>
     <button *ngIf="usuario.esPaciente" class="btn btn-primary" (click)="mostrarHistoriaClinica()" style="margin-top: 25px;" >Mi Historia Clínica</button>
+
+    <div *ngIf="usuario.esPaciente" class="mb-3">
+      <label for="especialistaSelect">Filtrar por especialista:</label>
+      <select id="especialistaSelect" [(ngModel)]="especialistaSeleccionado" class="form-control">
+        <option value="Todos">Todos</option>
+        <option *ngFor="let especialista of especialistas" [value]="especialista.apellido">{{ especialista.nombre}} {{especialista.apellido }}</option>
+      </select>
+    </div>
+
     <button *ngIf="usuario.esPaciente" class="btn btn-primary" (click)="descargarHistoriaClinica()" style="margin-top: 25px;" >Descargar</button>
 
   </div>
