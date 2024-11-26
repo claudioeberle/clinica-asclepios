@@ -24,11 +24,15 @@
         <p>Obra Social: {{ usr.obra_social }}</p>
         <p>Email: {{ usr.email }}</p>
         <h3>Últimos Turnos:</h3>
-      <ul>
-        <li class="turno-detalle" *ngFor="let turno of getUltimosTresTurnos(usr.email)" (click)="verHistoriaClinica(turno)">
-          Turno {{ turno.fecha }} - {{ turno.inicio }} -{{ turno.especialidad }}
-        </li>
-      </ul>
+        <ul>
+          <li class="turno-detalle" *ngFor="let turno of getUltimosTresTurnos(usr.email)" (click)="verHistoriaClinica(turno)">
+            Turno {{ turno.fecha }} - {{ turno.inicio }} -{{ turno.especialidad }}
+          </li>
+        </ul>
+        <button 
+        class="btn btn-outline-secondary mt-2" 
+        (click)="mostrarHistoriaClinica(usr.email)"
+        >Ver Historia Clínica</button>
       </div>
     </div>
 </div>

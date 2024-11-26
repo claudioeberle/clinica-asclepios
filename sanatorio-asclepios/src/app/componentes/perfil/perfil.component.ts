@@ -230,31 +230,31 @@ export class PerfilComponent implements OnInit{
     const pageWidth = doc.internal.pageSize.getWidth();
     const logo = environment.logo64;
   
-    const logoWidth = 30;
-    const logoHeight = 30;
+    const logoWidth = 20;
+    const logoHeight = 20;
     const logoX = (pageWidth - logoWidth) / 2;
-    doc.addImage(logo, 'PNG', logoX, 10, logoWidth, logoHeight);
+    doc.addImage(logo, 'PNG', logoX, 5, logoWidth, logoHeight);
   
-    doc.setFontSize(24);
+    doc.setFontSize(22);
     doc.setTextColor(0, 0, 0);
-    doc.text('Sanatorio Asclepios', pageWidth / 2, 50, { align: 'center' });
+    doc.text('Sanatorio Asclepios', pageWidth / 2, 35, { align: 'center' });
   
     doc.setFillColor('#5f83b1');
-    doc.rect(0, 80, pageWidth, 20, 'F');
+    doc.rect(0, 45, pageWidth, 20, 'F');
     doc.setFontSize(16);
     doc.setTextColor(255, 255, 255);
-    doc.text('HISTORIA CLÍNICA', pageWidth / 2, 92, { align: 'center' });
+    doc.text('HISTORIA CLÍNICA', pageWidth / 2, 57, { align: 'center' });
   
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Fecha de Impresión: ${new Date().toLocaleString()}`, 10, 110);
+    doc.text(`Fecha de Impresión: ${new Date().toLocaleString()}`, 10, 75);
   
     if (historiaClinicas.length > 0) {
       const pacienteNombre = historiaClinicas[0].paciente;
-      doc.text(`Paciente: ${pacienteNombre}`, 10, 120);
+      doc.text(`Paciente: ${pacienteNombre}`, 10, 85);
     }
   
-    let currentY = 130;
+    let currentY = 95;
   
     historiaClinicas.forEach((historia, index) => {
       doc.setDrawColor('#003366');

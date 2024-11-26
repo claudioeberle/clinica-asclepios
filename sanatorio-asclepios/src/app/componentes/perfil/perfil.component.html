@@ -8,11 +8,15 @@
     </div>
 
     <div class="perfil-datos">
-      <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+      <div class="nombre-usuario">
+        <h1>{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+      </div>
       <p><strong>Edad:</strong> {{ usuario.edad }}</p>
       <p><strong>DNI:</strong> {{ usuario.dni }}</p>
       <p><strong>Email:</strong> {{ usuario.email }}</p>
       <p *ngIf="usuario.esPaciente"><strong>Obra Social:</strong> {{ usuario.obra_social }}</p>
+      <p *ngIf="usuario.esEspecialista"><strong>Especialidades:</strong> {{ usuario.especialidad }}</p>
+
     </div>
     <button *ngIf="usuario.esPaciente" class="btn btn-primary" (click)="mostrarHistoriaClinica()" style="margin-top: 25px;" >Mi Historia Clínica</button>
     <button *ngIf="usuario.esPaciente" class="btn btn-primary" (click)="descargarHistoriaClinica()" style="margin-top: 25px;" >Descargar</button>

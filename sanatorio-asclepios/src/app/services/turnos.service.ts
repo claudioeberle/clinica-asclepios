@@ -20,7 +20,31 @@ export class TurnosService {
         turno.id = doc.id;
         turnos.push(turno);
       });
+
+      turnos.sort((a, b) => {
+        if(a.fecha && b.fecha){
+          const fechaA = this.convertirFechaFormatoAFecha(a.fecha).getTime();
+          const fechaB = this.convertirFechaFormatoAFecha(b.fecha).getTime();
+          return fechaB - fechaA;
+        }
+        return 0;
+      });
+      
+      turnos.sort((a, b) => {
+        if (a.fecha === b.fecha && a.inicio && b.inicio) {
+          const [horaA, minutoA] = a.inicio.split(':').map(Number);
+          const [horaB, minutoB] = b.inicio.split(':').map(Number);
+    
+          const totalMinutosA = horaA * 60 + minutoA;
+          const totalMinutosB = horaB * 60 + minutoB;
+    
+          return totalMinutosA - totalMinutosB;
+        }
+        return 0;
+      });
+
       return turnos;
+      
     } catch (error) {
       console.error('Error al obtener los turnos:', error);
       return [];
@@ -76,6 +100,28 @@ export class TurnosService {
       turno.id = doc.id;
       turnos.push(turno);
     });
+
+    turnos.sort((a, b) => {
+      if(a.fecha && b.fecha){
+        const fechaA = this.convertirFechaFormatoAFecha(a.fecha).getTime();
+        const fechaB = this.convertirFechaFormatoAFecha(b.fecha).getTime();
+        return fechaB - fechaA;
+      }
+      return 0;
+    });
+
+    turnos.sort((a, b) => {
+      if (a.fecha === b.fecha && a.inicio && b.inicio) {
+        const [horaA, minutoA] = a.inicio.split(':').map(Number);
+        const [horaB, minutoB] = b.inicio.split(':').map(Number);
+  
+        const totalMinutosA = horaA * 60 + minutoA;
+        const totalMinutosB = horaB * 60 + minutoB;
+  
+        return totalMinutosA - totalMinutosB;
+      }
+      return 0;
+    });
   
     return turnos;
   }
@@ -90,6 +136,28 @@ export class TurnosService {
       const turno = doc.data() as Turno;
       turno.id = doc.id;
       turnos.push(turno);
+    });
+
+    turnos.sort((a, b) => {
+      if(a.fecha && b.fecha){
+        const fechaA = this.convertirFechaFormatoAFecha(a.fecha).getTime();
+        const fechaB = this.convertirFechaFormatoAFecha(b.fecha).getTime();
+        return fechaB - fechaA;
+      }
+      return 0;
+    });
+
+    turnos.sort((a, b) => {
+      if (a.fecha === b.fecha && a.inicio && b.inicio) {
+        const [horaA, minutoA] = a.inicio.split(':').map(Number);
+        const [horaB, minutoB] = b.inicio.split(':').map(Number);
+  
+        const totalMinutosA = horaA * 60 + minutoA;
+        const totalMinutosB = horaB * 60 + minutoB;
+  
+        return totalMinutosA - totalMinutosB;
+      }
+      return 0;
     });
   
     return turnos;
